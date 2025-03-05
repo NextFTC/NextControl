@@ -19,7 +19,7 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
-import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.KineticState
 
 class FilterElement @JvmOverloads constructor(
     private val positionFilter: Filter = PassThroughFilter(),

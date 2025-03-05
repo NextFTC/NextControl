@@ -23,7 +23,7 @@ import com.rowanmcalpin.nextftc.nextcontrol.feedback.FeedbackElement
 import com.rowanmcalpin.nextftc.nextcontrol.feedforward.FeedforwardElement
 import com.rowanmcalpin.nextftc.nextcontrol.filters.FilterElement
 import com.rowanmcalpin.nextftc.nextcontrol.interpolators.InterpolatorElement
-import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.KineticState
 
 class ControlSystem(
     private val feedback: FeedbackElement,

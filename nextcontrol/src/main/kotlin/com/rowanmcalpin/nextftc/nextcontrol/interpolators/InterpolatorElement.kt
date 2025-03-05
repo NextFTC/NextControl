@@ -19,9 +19,14 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.interpolators
 
-import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.KineticState
 
 interface InterpolatorElement {
     var goal: KineticState
     val currentReference: KineticState
+}
+
+class ConstantInterpolator(override var goal: KineticState): InterpolatorElement {
+    override val currentReference: KineticState
+        get() = goal
 }

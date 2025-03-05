@@ -19,8 +19,12 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.feedforward
 
-import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.KineticState
 
 interface FeedforwardElement {
     fun calculate(reference: KineticState): Double
+}
+
+class NullFeedforward: FeedforwardElement {
+    override fun calculate(reference: KineticState): Double = 0.0
 }

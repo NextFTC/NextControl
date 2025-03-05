@@ -19,7 +19,7 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
-import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.KineticState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

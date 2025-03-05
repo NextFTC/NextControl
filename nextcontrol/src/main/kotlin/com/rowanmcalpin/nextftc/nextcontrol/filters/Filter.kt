@@ -22,3 +22,7 @@ package com.rowanmcalpin.nextftc.nextcontrol.filters
 interface Filter {
     fun filter(sensorMeasurement: Double): Double
 }
+
+class PassThroughFilter: Filter {
+    override fun filter(sensorMeasurement: Double): Double = sensorMeasurement
+}

@@ -19,8 +19,12 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.feedback
 
-import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.KineticState
 
 interface FeedbackElement {
     fun calculate(error: KineticState): Double
+}
+
+class NullFeedback: FeedbackElement {
+    override fun calculate(error: KineticState): Double = 0.0
 }

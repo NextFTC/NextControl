@@ -19,10 +19,12 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
-interface Filter {
-    fun filter(sensorMeasurement: Double): Double
+import com.rowanmcalpin.nextftc.nextcontrol.KineticType
+
+interface Filter<K: KineticType> {
+    fun filter(sensorMeasurement: K): Double
 }
 
-class PassThroughFilter: Filter {
-    override fun filter(sensorMeasurement: Double): Double = sensorMeasurement
+class PassThroughFilter<K: KineticType>: Filter<K> {
+    override fun filter(sensorMeasurement: K): Double = sensorMeasurement.value
 }

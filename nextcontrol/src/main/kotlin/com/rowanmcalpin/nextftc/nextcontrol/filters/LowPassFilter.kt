@@ -19,6 +19,9 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
+import com.rowanmcalpin.nextftc.nextcontrol.KineticType
+import kotlin.reflect.KClass
+
 /**
  * A simple low pass filter.
  *
@@ -27,7 +30,7 @@ package com.rowanmcalpin.nextftc.nextcontrol.filters
  *
  * @param alpha The low pass gain (A). Must be between 0 and 1.
  */
-class LowPassFilter @JvmOverloads constructor(val alpha: Double, var previousEstimate: Double = 0.0) : Filter {
+class LowPassFilter<K: KineticType> @JvmOverloads constructor(val alpha: Double, var previousEstimate: Double = 0.0) : Filter<K> {
 
     init {
         require(alpha in 0.0..1.0) { "Low pass gain must be between 0 and 1, but was $alpha" }
@@ -38,8 +41,8 @@ class LowPassFilter @JvmOverloads constructor(val alpha: Double, var previousEst
      * @param sensorMeasurement unfiltered sensor reading
      * @return filtered estimate
      */
-    override fun filter(sensorMeasurement: Double): Double {
-        val estimate = alpha * previousEstimate + (1 - alpha) * sensorMeasurement
+    override fun filter(sensorMeasurement: K): Double {
+        val estimate = alpha * previousEstimate + (1 - alpha) * sensorMeasurement.value
         previousEstimate = estimate
         return estimate
     }

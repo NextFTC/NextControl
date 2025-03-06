@@ -19,6 +19,7 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
+import com.rowanmcalpin.nextftc.nextcontrol.Position
 import org.junit.Assert.*
 
 import org.junit.Test
@@ -28,14 +29,14 @@ class PassThroughFilterTest {
     @Test
     fun `returns value passed in`() {
         // Arrange
-        val filter = PassThroughFilter()
+        val filter = PassThroughFilter<Position>()
 
-        val input = 10.0
+        val input = Position(10.0)
 
         // Act
         val actual = filter.filter(input)
 
         // Assert
-        assertEquals(input, actual, 0.0)
+        assertEquals(input.value, actual, 0.0)
     }
 }

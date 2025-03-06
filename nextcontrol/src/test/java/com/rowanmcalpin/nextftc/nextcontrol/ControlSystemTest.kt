@@ -39,7 +39,7 @@ class ControlSystemTest {
         val interpolator = mockk<InterpolatorElement>()
         val controlSystem = ControlSystem(mockk(), mockk(), mockk(), interpolator)
 
-        val expected = KineticState(1.0, 2.0, 3.0)
+        val expected = KineticState.of(1.0, 2.0, 3.0)
 
         every { interpolator.goal } returns expected
 
@@ -57,7 +57,7 @@ class ControlSystemTest {
         val interpolator = mockk<InterpolatorElement>(relaxed = true)
         val controlSystem = ControlSystem(mockk(), mockk(), mockk(), interpolator)
 
-        val input = KineticState(1.0, 2.0, 3.0)
+        val input = KineticState.of(1.0, 2.0, 3.0)
 
         // Act
         controlSystem.goal = input
@@ -115,10 +115,10 @@ class ControlSystemTest {
 
         val controlSystem = ControlSystem(feedback, mockk(relaxed = true), filter, interpolator)
 
-        val filteredMeasurement = KineticState(1.0, 2.0, 3.0)
+        val filteredMeasurement = KineticState.of(1.0, 2.0, 3.0)
         every { filter.filter(any()) } returns filteredMeasurement
 
-        val currentReference = KineticState(4.0, 5.0, 6.0)
+        val currentReference = KineticState.of(4.0, 5.0, 6.0)
         every { interpolator.currentReference } returns currentReference
 
         val expected = currentReference - filteredMeasurement
@@ -152,7 +152,7 @@ class ControlSystemTest {
     fun `uses provided sensor measurement`() {
         // Arrange
         val filter = mockk<FilterElement>(relaxed = true)
-        val measurement = KineticState(1.0, 2.0, 3.0)
+        val measurement = KineticState.of(1.0, 2.0, 3.0)
 
         val controlSystem = ControlSystem(mockk(relaxed = true), mockk(relaxed = true), filter, mockk(relaxed = true))
 

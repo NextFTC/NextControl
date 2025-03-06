@@ -1,6 +1,7 @@
 package com.rowanmcalpin.nextftc.nextcontrol.interpolators
 
 import com.rowanmcalpin.nextftc.nextcontrol.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.of
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -9,7 +10,7 @@ class ConstantInterpolatorTest {
     @Test
     fun `constructor parameter is set as goal`() {
         // Arrange
-        val expected = KineticState(1.0, 2.0, 3.0)
+        val expected = KineticState.of(1.0, 2.0, 3.0)
 
         // Act
         val interpolator = ConstantInterpolator(expected)
@@ -21,8 +22,8 @@ class ConstantInterpolatorTest {
     @Test
     fun `goal is returned when currentReference is accessed`() {
         // Arrange
-        val firstGoal = KineticState(1.0, 2.0, 3.0)
-        val secondGoal = KineticState(4.0, 5.0, 6.0)
+        val firstGoal = KineticState.of(1.0, 2.0, 3.0)
+        val secondGoal = KineticState.of(4.0, 5.0, 6.0)
 
         val interpolator = ConstantInterpolator(firstGoal)
 

@@ -2,6 +2,9 @@ package com.rowanmcalpin.nextftc.nextcontrol.feedback
 
 import com.rowanmcalpin.nextftc.nextcontrol.feedforward.NullFeedforward
 import com.rowanmcalpin.nextftc.nextcontrol.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.KineticType
+import com.rowanmcalpin.nextftc.nextcontrol.Velocity
+import com.rowanmcalpin.nextftc.nextcontrol.of
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -10,7 +13,7 @@ class NullFeedbackTest {
     fun `calculate returns 0 feedback`() {
         // Arrange
         val feedback = NullFeedback()
-        val error = KineticState(1.0, 2.0, 3.0)
+        val error = KineticState.of(1.0, 2.0, 3.0)
 
         // Act
         val actual = feedback.calculate(error)
@@ -23,7 +26,7 @@ class NullFeedbackTest {
     fun `calculate returns 0 feedback even for NaN and infinity input`() {
         // Arrange
         val feedback = NullFeedforward()
-        val error = KineticState(1.0, Double.POSITIVE_INFINITY, Double.NaN)
+        val error = KineticState.of(1.0, Double.POSITIVE_INFINITY, Double.NaN)
 
         // Act
         val actual = feedback.calculate(error)

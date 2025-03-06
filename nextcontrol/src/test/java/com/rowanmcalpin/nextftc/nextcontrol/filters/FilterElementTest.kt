@@ -19,7 +19,11 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
+import com.rowanmcalpin.nextftc.nextcontrol.Acceleration
 import com.rowanmcalpin.nextftc.nextcontrol.KineticState
+import com.rowanmcalpin.nextftc.nextcontrol.Position
+import com.rowanmcalpin.nextftc.nextcontrol.Velocity
+import com.rowanmcalpin.nextftc.nextcontrol.of
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -33,7 +37,7 @@ class FilterElementTest {
     fun `uses PassThroughFilter by default`() {
         // Arrange
         val filterElement = FilterElement()
-        val input = KineticState(10.0, 20.0, 30.0)
+        val input = KineticState.of(10.0, 20.0, 30.0)
 
         // Act
         val actual = filterElement.filter(input)
@@ -45,86 +49,86 @@ class FilterElementTest {
     @Test
     fun `uses custom position filter`() {
         // Arrange
-        val positionFilter = mockk<Filter>()
+        val positionFilter = mockk<Filter<Position>>()
         val filterElement = FilterElement(positionFilter = positionFilter)
 
-        val input = KineticState(10.0, 20.0, 30.0)
-        val expected = KineticState(1.0, 20.0, 30.0)
+        val input = KineticState.of(10.0, 20.0, 30.0)
+        val expected = KineticState.of(1.0, 20.0, 30.0)
 
-        every { positionFilter.filter(10.0) } returns 1.0
+        every { positionFilter.filter(Position(10.0)) } returns 1.0
 
         // Act
         val actual = filterElement.filter(input)
 
         // Assert
         assertEquals(expected, actual)
-        verify (exactly = 1) { positionFilter.filter(10.0) }
+        verify (exactly = 1) { positionFilter.filter(Position(10.0)) }
     }
 
     @Test
     fun `uses custom velocity filter`() {
         // Arrange
-        val velocityFilter = mockk<Filter>()
+        val velocityFilter = mockk<Filter<Velocity>>()
         val filterElement = FilterElement(velocityFilter = velocityFilter)
 
-        val input = KineticState(10.0, 20.0, 30.0)
-        val expected = KineticState(10.0, 2.0, 30.0)
+        val input = KineticState.of(10.0, 20.0, 30.0)
+        val expected = KineticState.of(10.0, 2.0, 30.0)
 
-        every { velocityFilter.filter(20.0) } returns 2.0
+        every { velocityFilter.filter(Velocity(20.0)) } returns 2.0
 
         // Act
         val actual = filterElement.filter(input)
 
         // Assert
         assertEquals(expected, actual)
-        verify (exactly = 1) { velocityFilter.filter(20.0) }
+        verify (exactly = 1) { velocityFilter.filter(Velocity(20.0)) }
     }
 
     @Test
     fun `uses custom acceleration filter`() {
         // Arrange
-        val accelerationFilter = mockk<Filter>()
+        val accelerationFilter = mockk<Filter<Acceleration>>()
         val filterElement = FilterElement(accelerationFilter = accelerationFilter)
 
-        val input = KineticState(10.0, 20.0, 30.0)
-        val expected = KineticState(10.0, 20.0, 3.0)
+        val input = KineticState.of(10.0, 20.0, 30.0)
+        val expected = KineticState.of(10.0, 20.0, 3.0)
 
-        every { accelerationFilter.filter(30.0) } returns 3.0
+        every { accelerationFilter.filter(Acceleration(30.0)) } returns 3.0
 
         // Act
         val actual = filterElement.filter(input)
 
         // Assert
         assertEquals(expected, actual)
-        verify (exactly = 1) { accelerationFilter.filter(30.0) }
+        verify (exactly = 1) { accelerationFilter.filter(Acceleration(30.0)) }
     }
 
     @Test
     fun `uses all three custom filters`() {
         // Arrange
-        val positionFilter = mockk<Filter>()
-        val velocityFilter = mockk<Filter>()
-        val accelerationFilter = mockk<Filter>()
+        val positionFilter = mockk<Filter<Position>>()
+        val velocityFilter = mockk<Filter<Velocity>>()
+        val accelerationFilter = mockk<Filter<Acceleration>>()
         val filterElement = FilterElement(
             positionFilter = positionFilter,
             velocityFilter = velocityFilter,
             accelerationFilter = accelerationFilter
         )
 
-        val input = KineticState(10.0, 20.0, 30.0)
-        val expected = KineticState(1.0, 2.0, 3.0)
+        val input = KineticState.of(10.0, 20.0, 30.0)
+        val expected = KineticState.of(1.0, 2.0, 3.0)
 
-        every { positionFilter.filter(10.0) } returns 1.0
-        every { velocityFilter.filter(20.0) } returns 2.0
-        every { accelerationFilter.filter(30.0) } returns 3.0
+        every { positionFilter.filter(Position(10.0)) } returns 1.0
+        every { velocityFilter.filter(Velocity(20.0)) } returns 2.0
+        every { accelerationFilter.filter(Acceleration(30.0)) } returns 3.0
 
         // Act
         val actual = filterElement.filter(input)
 
         // Assert
         assertEquals(expected, actual)
-        verify (exactly = 1) { positionFilter.filter(10.0) }
-        verify (exactly = 1) { velocityFilter.filter(20.0) }
-        verify (exactly = 1) { accelerationFilter.filter(30.0) }
+        verify (exactly = 1) { positionFilter.filter(Position(10.0)) }
+        verify (exactly = 1) { velocityFilter.filter(Velocity(20.0)) }
+        verify (exactly = 1) { accelerationFilter.filter(Acceleration(30.0)) }
     }
 }

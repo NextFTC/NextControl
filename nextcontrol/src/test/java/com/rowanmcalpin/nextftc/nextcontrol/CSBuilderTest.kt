@@ -1,144 +1,136 @@
 package com.rowanmcalpin.nextftc.nextcontrol
 
 import com.rowanmcalpin.nextftc.nextcontrol.feedback.FeedbackElement
+import com.rowanmcalpin.nextftc.nextcontrol.feedback.PIDCoefficients
+import com.rowanmcalpin.nextftc.nextcontrol.feedback.PIDElement
+import com.rowanmcalpin.nextftc.nextcontrol.feedback.PIDType
 import com.rowanmcalpin.nextftc.nextcontrol.feedforward.FeedforwardElement
 import com.rowanmcalpin.nextftc.nextcontrol.filters.FilterElement
+import com.rowanmcalpin.nextftc.nextcontrol.interpolators.ConstantInterpolator
 import com.rowanmcalpin.nextftc.nextcontrol.interpolators.InterpolatorElement
 import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class CSBuilderTest {
+class BuildControlSystemTest {
+
     @Test
-    fun `delegates goal getter to interpolator`() {
+    fun `buildControlSystem with interpolator sets correct components`() {
         // Arrange
         val interpolator = mockk<InterpolatorElement>()
-        val controlSystem = ControlSystem(mockk(), mockk(), mockk(), interpolator)
-
-        val expected = KineticState(1.0, 2.0, 3.0)
-
-        every { interpolator.goal } returns expected
+        val kP = 1.0
+        val kI = 0.1
+        val kD = 0.01
 
         // Act
-        val actual = controlSystem.goal
-
-        // Assert
-        assertEquals(expected, actual)
-        verify (exactly = 1) { interpolator.goal }
-    }
-
-    @Test
-    fun `delegates goal setter to interpolator`() {
-        // Arrange
-        val interpolator = mockk<InterpolatorElement>(relaxed = true)
-        val controlSystem = ControlSystem(mockk(), mockk(), mockk(), interpolator)
-
-        val input = KineticState(1.0, 2.0, 3.0)
-
-        // Act
-        controlSystem.goal = input
-
-        // Assert
-        verify (exactly = 1) { interpolator.goal = input }
-    }
-
-    @Test
-    fun `uses default measurement when none is provided`() {
-        // Arrange
-        val filter = mockk<FilterElement>(relaxed = true)
-
-        val controlSystem = ControlSystem(mockk(relaxed = true), mockk(relaxed = true), filter, mockk(relaxed = true))
-
-        val defaultMeasurement = KineticState()
-
-        // Act
-        controlSystem.calculate()
-
-        // Assert
-        verify (exactly = 1) { filter.filter(defaultMeasurement) }
-    }
-
-    @Test
-    fun `all elements are called`() {
-        // Arrange
-        val feedback = mockk<FeedbackElement>(relaxed = true)
-        val feedforward = mockk<FeedforwardElement>(relaxed = true)
-        val filter = mockk<FilterElement>(relaxed = true)
-        val interpolator = mockk<InterpolatorElement>(relaxed = true)
-
-        val controlSystem = ControlSystem(feedback, feedforward, filter, interpolator)
-
-        // Act
-        controlSystem.calculate()
-
-        // Assert
-        verify (exactly = 1) {
-            feedback.calculate(any())
-            feedforward.calculate(any())
-            filter.filter(any())
+        val controlSystem = buildControlSystem(interpolator) {
+            setPosPID(kP, kI, kD)
         }
-        verify (exactly = 2) {
-            interpolator.currentReference
-        }
+
+        // Assert
+        val feedbackField = controlSystem.javaClass.getDeclaredField("feedback")
+        feedbackField.isAccessible = true
+        val feedbackComponent = feedbackField.get(controlSystem)
+
+        assertTrue(feedbackComponent is PIDElement)
+        val pidElement = feedbackComponent as PIDElement
+        assertEquals(PIDType.POSITIONAL, pidElement.type)
+        assertEquals(kP, pidElement.coefficients.kP)
+        assertEquals(kI, pidElement.coefficients.kI)
+        assertEquals(kD, pidElement.coefficients.kD)
+
+        val interpolatorField = controlSystem.javaClass.getDeclaredField("interpolator")
+        interpolatorField.isAccessible = true
+        val interpolatorComponent = interpolatorField.get(controlSystem)
+
+        assertEquals(interpolator, interpolatorComponent)
     }
 
     @Test
-    fun `error is interpolator reference minus filtered measurement`() {
+    fun `buildControlSystem with goal sets correct components`() {
         // Arrange
-        val feedback = mockk<FeedbackElement>(relaxed = true)
-        val filter = mockk<FilterElement>()
+        val goal = KineticState(10.0, 0.0, 0.0)
+        val kP = 1.0
+        val kI = 0.1
+        val kD = 0.01
+
+        // Act
+        val controlSystem = buildControlSystem(goal) {
+            setPosPID(kP, kI, kD)
+        }
+
+        // Assert
+        val feedbackField = controlSystem.javaClass.getDeclaredField("feedback")
+        feedbackField.isAccessible = true
+        val feedbackComponent = feedbackField.get(controlSystem)
+
+        assertTrue(feedbackComponent is PIDElement)
+        val pidElement = feedbackComponent as PIDElement
+        assertEquals(PIDType.POSITIONAL, pidElement.type)
+        assertEquals(kP, pidElement.coefficients.kP)
+        assertEquals(kI, pidElement.coefficients.kI)
+        assertEquals(kD, pidElement.coefficients.kD)
+
+        val interpolatorField = controlSystem.javaClass.getDeclaredField("interpolator")
+        interpolatorField.isAccessible = true
+        val interpolatorComponent = interpolatorField.get(controlSystem)
+
+        assertTrue(interpolatorComponent is ConstantInterpolator)
+        val interpolator = interpolatorComponent as ConstantInterpolator
+        assertEquals(goal, interpolator.goal)
+    }
+
+    @Test
+    fun `buildControlSystem can add multiple components`() {
+        // Arrange
         val interpolator = mockk<InterpolatorElement>()
-
-        val controlSystem = ControlSystem(feedback, mockk(relaxed = true), filter, interpolator)
-
-        val filteredMeasurement = KineticState(1.0, 2.0, 3.0)
-        every { filter.filter(any()) } returns filteredMeasurement
-
-        val currentReference = KineticState(4.0, 5.0, 6.0)
-        every { interpolator.currentReference } returns currentReference
-
-        val expected = currentReference - filteredMeasurement
+        val mockFeedforward = mockk<FeedforwardElement>()
+        val mockFilter = mockk<FilterElement>()
 
         // Act
-        controlSystem.calculate()
+        val controlSystem = buildControlSystem(interpolator) {
+            setPosPID(1.0, 0.1, 0.01)
+            setFeedforward(mockFeedforward)
+            setFilter(mockFilter)
+        }
 
         // Assert
-        verify { feedback.calculate(expected) }
+        val feedforwardField = controlSystem.javaClass.getDeclaredField("feedforward")
+        feedforwardField.isAccessible = true
+        val feedforwardComponent = feedforwardField.get(controlSystem)
+        assertEquals(mockFeedforward, feedforwardComponent)
+
+        val filterField = controlSystem.javaClass.getDeclaredField("filter")
+        filterField.isAccessible = true
+        val filterComponent = filterField.get(controlSystem)
+        assertEquals(mockFilter, filterComponent)
     }
 
     @Test
-    fun `output is sum of feedback and feedforward`() {
-        // Arrange
-        val feedback = mockk<FeedbackElement>()
-        val feedforward = mockk<FeedforwardElement>()
+    fun `buildControlSystem can set the velocity pid`(){
+        //arrange
+        val interpolator = mockk<InterpolatorElement>()
+        val kp = 1.0
+        val ki = 0.0
+        val kd = 0.0
 
-        every { feedback.calculate(any()) } returns 2.0
-        every { feedforward.calculate(any()) } returns 3.0
+        //act
+        val controlSystem = buildControlSystem(interpolator) {
+            setVelPID(kp, ki, kd)
+        }
 
-        val controlSystem = ControlSystem(feedback, feedforward, mockk(relaxed = true), mockk(relaxed = true))
+        //assert
+        val feedbackField = controlSystem.javaClass.getDeclaredField("feedback")
+        feedbackField.isAccessible = true
+        val feedbackComponent = feedbackField.get(controlSystem)
 
-        // Act
-        val result = controlSystem.calculate()
-
-        // Assert
-        assertEquals(5.0, result, 0.0)
-    }
-
-    @Test
-    fun `uses provided sensor measurement`() {
-        // Arrange
-        val filter = mockk<FilterElement>(relaxed = true)
-        val measurement = KineticState(1.0, 2.0, 3.0)
-
-        val controlSystem = ControlSystem(mockk(relaxed = true), mockk(relaxed = true), filter, mockk(relaxed = true))
-
-        // Act
-        controlSystem.calculate(measurement)
-
-        // Assert
-        verify { filter.filter(measurement) }
+        assertTrue(feedbackComponent is PIDElement)
+        val pidElement = feedbackComponent as PIDElement
+        assertEquals(PIDType.VELOCITY, pidElement.type)
+        assertEquals(kp, pidElement.coefficients.kP)
+        assertEquals(ki, pidElement.coefficients.kI)
+        assertEquals(kd, pidElement.coefficients.kD)
     }
 }

@@ -11,51 +11,30 @@ import com.rowanmcalpin.nextftc.nextcontrol.filters.FilterElement
 import com.rowanmcalpin.nextftc.nextcontrol.interpolators.InterpolatorElement
 
 class ControlSystemBuilder private constructor(
-    private val feedback: FeedbackElement = NullFeedback(),
-    private val feedforward: FeedforwardElement = NullFeedforward(),
-    private val filter: FilterElement = FilterElement(),
-    private val interpolator: InterpolatorElement,
+    private var feedback: FeedbackElement = NullFeedback(),
+    private var feedforward: FeedforwardElement = NullFeedforward(),
+    private var filter: FilterElement = FilterElement(),
+    private var interpolator: InterpolatorElement,
 ) {
-    private constructor(
-        system: ControlSystemBuilder,
-        feedback: FeedbackElement = system.feedback,
-        feedforward: FeedforwardElement = system.feedforward,
-        filter: FilterElement = system.filter,
-        interpolator: InterpolatorElement = system.interpolator,
-    ) : this(feedback, feedforward, filter, interpolator)
-
     constructor(startingInterpolator: InterpolatorElement) : this(interpolator = startingInterpolator)
 
     fun build() = ControlSystem(feedback, feedforward, filter, interpolator)
 
-    fun withFeedback(feedback: FeedbackElement) = ControlSystemBuilder(
-        this,
-        feedback = feedback
-    )
+    fun setFeedback(feedback: FeedbackElement) = this.apply { this.feedback = feedback }
 
-    fun withFeedforward(feedforward: FeedforwardElement) = ControlSystemBuilder(
-        this,
-        feedforward = feedforward
-    )
+    fun setFeedforward(feedforward: FeedforwardElement) = this.apply { this.feedforward = feedforward }
 
+    fun setFilter(filter: FilterElement) = this.apply { this.filter = filter }
 
-    fun withFilter(filter: FilterElement) = ControlSystemBuilder(
-        this,
-        filter = filter
-    )
+    fun setInterpolator(interpolator: InterpolatorElement) = this.apply { this.interpolator = interpolator}
 
-    fun withInterpolator(interpolator: InterpolatorElement) = ControlSystemBuilder(
-        this,
-        interpolator = interpolator
-    )
+    fun setPosPID(coefficients: PIDCoefficients) =
+        setFeedback(PIDElement(PIDType.POSITIONAL, coefficients))
+    fun setPosPID(kP: Double, kI: Double, kD: Double) =
+        setPosPID(PIDCoefficients(kP, kI, kD))
 
-    fun withPosPID(coefficients: PIDCoefficients) =
-        withFeedback(PIDElement(PIDType.POSITIONAL, coefficients))
-    fun withPosPID(kP: Double, kI: Double, kD: Double) =
-        withPosPID(PIDCoefficients(kP, kI, kD))
-
-    fun withVelPID(coefficients: PIDCoefficients) =
-        withFeedback(PIDElement(PIDType.VELOCITY, coefficients))
-    fun withVelPID(kP: Double, kI: Double, kD: Double) =
-        withVelPID(PIDCoefficients(kP, kI, kD))
+    fun setVelPID(coefficients: PIDCoefficients) =
+        setFeedback(PIDElement(PIDType.VELOCITY, coefficients))
+    fun setVelPID(kP: Double, kI: Double, kD: Double) =
+        setVelPID(PIDCoefficients(kP, kI, kD))
 }

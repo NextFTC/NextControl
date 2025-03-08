@@ -1,23 +1,12 @@
 package com.rowanmcalpin.nextftc.nextcontrol.feedback
 
 import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
+import kotlin.math.sqrt
 
 /**
- * Coefficients for a PID controller.
- * @param kP proportional gain
- * @param kI integral gain
- * @param kD derivative gain
+ * Square-root P + ID (aka SquID) controller.
  */
-data class PIDCoefficients @JvmOverloads constructor(val kP: Double, val kI: Double = 0.0, val kD: Double = 0.0)
-
-enum class PIDType {
-    POSITIONAL, VELOCITY
-}
-
-/**
- * Traditional proportional-integral-derivative controller.
- */
-internal class PIDController(var coefficients: PIDCoefficients) {
+internal class SquIDController(var coefficients: PIDCoefficients) {
     @JvmOverloads constructor(kP: Double, kI: Double = 0.0, kD: Double = 0.0) :
             this(PIDCoefficients(kP, kI, kD))
 
@@ -41,7 +30,7 @@ internal class PIDController(var coefficients: PIDCoefficients) {
         if (lastTimestamp == 0L) {
             lastError = posError
             lastTimestamp = timestamp
-            return coefficients.kP * posError
+            return sqrt(coefficients.kP * posError)
         }
 
         val dt = (timestamp - lastTimestamp).toDouble()
@@ -52,7 +41,7 @@ internal class PIDController(var coefficients: PIDCoefficients) {
 
         val derivError = velError ?: ((posError - lastError) / dt)
 
-        return coefficients.kP * posError + coefficients.kI * errorSum + coefficients.kD * derivError
+        return sqrt(coefficients.kP * posError) + coefficients.kI * errorSum + coefficients.kD * derivError
     }
 
     fun calculate(posError: Double, velError: Double? = null) = calculate(System.nanoTime(), posError, velError)
@@ -71,14 +60,14 @@ internal class PIDController(var coefficients: PIDCoefficients) {
  * PID controller that operates on positions.
  * @param coefficients PID gains
  */
-class PIDElement(
+class SquIDElement(
     val type: PIDType,
     coefficients: PIDCoefficients
 ) : FeedbackElement {
     @JvmOverloads constructor(type: PIDType, kP: Double, kI: Double = 0.0, kD: Double = 0.0) :
             this(type, PIDCoefficients(kP, kI, kD))
 
-    private val controller = PIDController(coefficients)
+    private val controller = SquIDController(coefficients)
     var coefficients by controller::coefficients
 
     fun calculate(timestamp: Long, error: KineticState) = when (type) {

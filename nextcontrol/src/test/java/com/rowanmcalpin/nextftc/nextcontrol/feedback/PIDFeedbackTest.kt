@@ -271,4 +271,19 @@ class PIDFeedbackTest {
         assertEquals(10.0, result1, 0.001)
         assertEquals(0.0, result2, 0.001)
     }
+
+    @Test
+    fun `setPID actually changes coefficients`() {
+        //Arrange
+        val controller = PIDController(1.0, 0.0, 0.0)
+
+        //Act
+        val result1 = controller.calculate(10.0)
+        controller.setPID(2.0, 0.0, 0.0)
+        val result2 = controller.calculate(10.0)
+
+        //Assert
+        assertEquals(10.0, result1, 0.0)
+        assertEquals(20.0, result2, 0.0)
+    }
 }

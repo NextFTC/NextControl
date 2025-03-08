@@ -29,6 +29,10 @@ internal open class PIDController(var coefficients: PIDCoefficients) {
     internal var errorSum = 0.0
     internal var lastTimestamp = 0L
 
+    fun setPID(kP: Double, kI: Double, kD: Double) {
+        coefficients = PIDCoefficients(kP, kI, kD)
+    }
+
     open fun calculate(
         timestamp: Long,
         posError: Double,
@@ -83,4 +87,6 @@ class PIDElement(
     }
 
     override fun calculate(error: KineticState) = this.calculate(System.nanoTime(), error)
+
+    fun setPID(kP: Double, kI: Double, kD: Double) = controller.setPID(kP, kI, kD)
 }

@@ -191,8 +191,8 @@ class SquIDElementTest {
 
         // Act
         every { TimeUtil.nanoTime() } returns firstTimespan
-        val positionFirst = positionSquID.calculate(KineticState(firstError, 0.0, 25.0))
-        val velocityFirst = velocitySquID.calculate(KineticState(25.0, firstError, 0.0))
+        positionSquID.calculate(KineticState(firstError, 0.0, 25.0))
+        velocitySquID.calculate(KineticState(25.0, firstError, 0.0))
 
         every { TimeUtil.nanoTime() } returns firstTimespan + secondTimespan
         val positionActual =

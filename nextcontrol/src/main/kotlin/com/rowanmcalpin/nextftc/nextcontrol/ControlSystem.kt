@@ -41,7 +41,7 @@ import com.rowanmcalpin.nextftc.nextcontrol.interpolators.InterpolatorElement
  * @param filter The [FilterElement], which removes noise from the sensor measurements.
  * @param interpolator The [InterpolatorElement], which interpolates goals into references.
  *
- * @author BeepBot99
+ * @author BeepBot99, rowan-mcalpin
  */
 class ControlSystem(
     private val feedback: FeedbackElement,
@@ -56,6 +56,16 @@ class ControlSystem(
     var goal: KineticState by interpolator::goal
 
     /**
+     * The last raw (unfiltered) measurement
+     */
+    var lastRawMeasurement: KineticState = KineticState();
+
+    /**
+     * The last filtered measurement
+     */
+    var lastFilteredMeasurement: KineticState = KineticState();
+
+    /**
      * Calculates the output power given the current state of the system. In the case that your
      *  system is feedforward-only, leave the current state empty.
      *
@@ -68,12 +78,30 @@ class ControlSystem(
     fun calculate(sensorMeasurement: KineticState = KineticState()): Double {
         val filteredMeasurement = filter.filter(sensorMeasurement)
 
+        lastRawMeasurement = sensorMeasurement;
+        lastFilteredMeasurement = filteredMeasurement;
+
         val error = interpolator.currentReference - filteredMeasurement
 
         val feedbackOutput = feedback.calculate(error)
         val feedforwardOutput = feedforward.calculate(interpolator.currentReference)
 
         return feedbackOutput + feedforwardOutput
+    }
+
+    /**
+     * Whether the system is within a specified tolerance of the goal
+     *
+     * @param tolerance how close to the goal is considered within tolerance
+     * @param useFilteredMeasurement whether to use a filtered or raw measurement
+     *
+     * @return whether the system is within tolerance of the goal
+     *
+     * @author rowan-mcalpin
+     */
+    @JvmOverloads
+    fun isWithinTolerance(tolerance: Double, useFilteredMeasurement: Boolean = true): Boolean {
+        return (goal - (if (useFilteredMeasurement) lastFilteredMeasurement else lastRawMeasurement)).position <= tolerance;
     }
 }
 

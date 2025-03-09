@@ -16,21 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.rowanmcalpin.nextftc.nextcontrol.filters
+package com.rowanmcalpin.nextftc.nextcontrol
 
 /**
- * A filter that can be applied to a sensor measurement.
+ * Holds a state of a kinetic system.
+ *
+ * @param position the state's position
+ * @param velocity the state's velocity
+ * @param acceleration the state's acceleration
  *
  * @author BeepBot99
  */
-interface Filter {
+data class KineticState @JvmOverloads constructor(
+    val position: Double = 0.0,
+    val velocity: Double = 0.0,
+    val acceleration: Double = 0.0
+) {
 
-    /**
-     * Filters the given sensor measurement.
-     *
-     * @param sensorMeasurement The sensor measurement to filter.
-     *
-     * @return The filtered sensor measurement.
-     */
-    fun filter(sensorMeasurement: Double): Double
+    operator fun minus(other: KineticState): KineticState = KineticState(
+        position - other.position,
+        velocity - other.velocity,
+        acceleration - other.acceleration
+    )
 }

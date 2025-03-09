@@ -16,21 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.rowanmcalpin.nextftc.nextcontrol.filters
+package com.rowanmcalpin.nextftc.nextcontrol
 
-/**
- * A filter that can be applied to a sensor measurement.
- *
- * @author BeepBot99
- */
-interface Filter {
-
-    /**
-     * Filters the given sensor measurement.
-     *
-     * @param sensorMeasurement The sensor measurement to filter.
-     *
-     * @return The filtered sensor measurement.
-     */
-    fun filter(sensorMeasurement: Double): Double
+object TimeUtil {
+    fun nanoTime(): Long = System.nanoTime()
 }

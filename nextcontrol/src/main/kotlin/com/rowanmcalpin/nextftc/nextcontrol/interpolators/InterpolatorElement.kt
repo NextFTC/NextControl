@@ -38,3 +38,19 @@ interface InterpolatorElement {
      */
     val currentReference: KineticState
 }
+
+/**
+ * An [InterpolatorElement] that doesn't interpolate and always returns the goal.
+ *
+ * @param goal The initial goal, usually zero.
+ *
+ * @author BeepBot99
+ */
+class ConstantInterpolator(override var goal: KineticState) : InterpolatorElement {
+
+    /**
+     * The reference at the current time, which is always equal to [goal].
+     */
+    override val currentReference: KineticState
+        get() = goal
+}

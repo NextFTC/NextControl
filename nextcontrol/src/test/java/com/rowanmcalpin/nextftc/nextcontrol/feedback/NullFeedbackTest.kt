@@ -18,7 +18,6 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.feedback
 
-import com.rowanmcalpin.nextftc.nextcontrol.feedforward.NullFeedforward
 import com.rowanmcalpin.nextftc.nextcontrol.KineticState
 import org.junit.Assert.*
 import org.junit.Test

@@ -38,3 +38,20 @@ interface FeedforwardElement {
      */
     fun calculate(reference: KineticState): Double
 }
+
+/**
+ * A [FeedforwardElement] that does nothing.
+ * This can be useful when you want to rely on only feedback control, with no feedforward.
+ *
+ * @author BeepBot99
+ */
+class NullFeedforward : FeedforwardElement {
+
+    /**
+     * Calculates the power to apply to the system.
+     *
+     * @param reference The reference state of the system.
+     * @return Zero, as this feedforward element does nothing.
+     */
+    override fun calculate(reference: KineticState): Double = 0.0
+}

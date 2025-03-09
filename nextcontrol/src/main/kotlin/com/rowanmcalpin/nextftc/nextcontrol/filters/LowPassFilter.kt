@@ -18,19 +18,40 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
+data class LowPassParameters @JvmOverloads constructor(
+    @JvmField var alpha: Double = 0.0,
+    @JvmField var startingEstimate: Double = 0.0
+)
+
 /**
  * A simple low pass filter.
  *
- * High values of A are smoother but have more phase lag, low values of A allow more noise but
+ * High values of alpha are smoother but have more phase lag, low values of alpha allow more noise
+ * but
  * will respond faster to quick changes in the measured state.
  *
- * @param alpha The low pass gain (A). Must be between 0 and 1.
+ * @param parameters The parameters to use to configure the filter
  */
-class LowPassFilter @JvmOverloads constructor(val alpha: Double, var previousEstimate: Double = 0.0) : Filter {
+class LowPassFilter(val parameters: LowPassParameters) : Filter {
+
+    /**
+     * @param alpha The low pass gain. Must be between 0 and 1.
+     * @param startingEstimate The initial estimate. Should be equal to the starting position. Is only read on class initialization.
+     */
+    constructor(alpha: Double, startingEstimate: Double = 0.0) : this(
+        LowPassParameters(
+            alpha,
+            startingEstimate
+        )
+    )
 
     init {
-        require(alpha in 0.0..1.0) { "Low pass gain must be between 0 and 1, but was $alpha" }
+        require(parameters.alpha in 0.0..1.0) {
+            "Low pass gain must be between 0 and 1, but was ${parameters.alpha}"
+        }
     }
+
+    var previousEstimate = parameters.startingEstimate
 
     /**
      * Low Pass Filter estimate
@@ -38,7 +59,8 @@ class LowPassFilter @JvmOverloads constructor(val alpha: Double, var previousEst
      * @return filtered estimate
      */
     override fun filter(sensorMeasurement: Double): Double {
-        val estimate = alpha * previousEstimate + (1 - alpha) * sensorMeasurement
+        val estimate = parameters.alpha * previousEstimate + (1 - parameters.alpha) *
+                sensorMeasurement
         previousEstimate = estimate
         return estimate
     }

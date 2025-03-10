@@ -6,7 +6,6 @@ import com.rowanmcalpin.nextftc.nextcontrol.feedback.PIDElement
 import com.rowanmcalpin.nextftc.nextcontrol.feedback.PIDType
 import com.rowanmcalpin.nextftc.nextcontrol.feedforward.FeedforwardElement
 import com.rowanmcalpin.nextftc.nextcontrol.filters.FilterElement
-import com.rowanmcalpin.nextftc.nextcontrol.interpolators.ConstantInterpolator
 import com.rowanmcalpin.nextftc.nextcontrol.interpolators.InterpolatorElement
 import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
 import io.mockk.mockk

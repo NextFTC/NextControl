@@ -19,6 +19,6 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol.filters
 
-interface Filter {
+fun interface Filter {
     fun filter(sensorMeasurement: Double): Double
 }

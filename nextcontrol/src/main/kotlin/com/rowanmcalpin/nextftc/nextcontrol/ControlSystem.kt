@@ -19,10 +19,10 @@
 
 package com.rowanmcalpin.nextftc.nextcontrol
 
+import com.rowanmcalpin.nextftc.nextcontrol.builder.ControlSystemBuilder
 import com.rowanmcalpin.nextftc.nextcontrol.feedback.FeedbackElement
 import com.rowanmcalpin.nextftc.nextcontrol.feedforward.FeedforwardElement
 import com.rowanmcalpin.nextftc.nextcontrol.filters.FilterElement
-import com.rowanmcalpin.nextftc.nextcontrol.interpolators.ConstantInterpolator
 import com.rowanmcalpin.nextftc.nextcontrol.interpolators.InterpolatorElement
 import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
 
@@ -32,6 +32,7 @@ class ControlSystem(
     private val filter: FilterElement,
     private val interpolator: InterpolatorElement,
 ) {
+
     var goal: KineticState by interpolator::goal
 
     @JvmOverloads
@@ -47,19 +48,8 @@ class ControlSystem(
     }
 
     companion object {
-        @JvmStatic fun builder(startingInterpolator: InterpolatorElement) = ControlSystemBuilder(startingInterpolator)
-        @JvmStatic fun builder(startingGoal: KineticState) = builder(ConstantInterpolator(startingGoal))
 
-        operator fun invoke(startingInterpolator: InterpolatorElement) = builder(startingInterpolator)
-        operator fun invoke(startingGoal: KineticState) = builder(startingGoal)
+        @JvmStatic
+        fun builder() = ControlSystemBuilder()
     }
 }
-
-fun buildControlSystem(startingInterpolator: InterpolatorElement, builder: ControlSystemBuilder.() -> Unit): ControlSystem {
-    val csb =  ControlSystemBuilder(startingInterpolator)
-    csb.builder()
-    return csb.build()
-}
-
-fun buildControlSystem(startingGoal: KineticState, builder: ControlSystemBuilder.() -> Unit) =
-    buildControlSystem(ConstantInterpolator(startingGoal), builder)

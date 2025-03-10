@@ -22,9 +22,9 @@ package com.rowanmcalpin.nextftc.nextcontrol.filters
 import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
 
 class FilterElement @JvmOverloads constructor(
-    private val positionFilter: Filter = PassThroughFilter(),
-    private val velocityFilter: Filter = PassThroughFilter(),
-    private val accelerationFilter: Filter = PassThroughFilter()
+    private val positionFilter: Filter = Filter { it },
+    private val velocityFilter: Filter = Filter { it },
+    private val accelerationFilter: Filter = Filter { it }
 ) {
     fun filter(sensorMeasurement: KineticState): KineticState {
         return KineticState(

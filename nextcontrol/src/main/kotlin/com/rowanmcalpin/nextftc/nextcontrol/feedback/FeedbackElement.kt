@@ -21,6 +21,6 @@ package com.rowanmcalpin.nextftc.nextcontrol.feedback
 
 import com.rowanmcalpin.nextftc.nextcontrol.utils.KineticState
 
-interface FeedbackElement {
+fun interface FeedbackElement {
     fun calculate(error: KineticState): Double
 }

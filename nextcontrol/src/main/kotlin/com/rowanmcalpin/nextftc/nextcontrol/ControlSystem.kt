@@ -22,6 +22,7 @@ import com.rowanmcalpin.nextftc.nextcontrol.feedback.FeedbackElement
 import com.rowanmcalpin.nextftc.nextcontrol.feedforward.FeedforwardElement
 import com.rowanmcalpin.nextftc.nextcontrol.filters.FilterElement
 import com.rowanmcalpin.nextftc.nextcontrol.interpolators.InterpolatorElement
+import kotlin.math.abs
 
 /**
  * A robust controller for almost any system.
@@ -101,7 +102,10 @@ class ControlSystem(
      */
     @JvmOverloads
     fun isWithinTolerance(tolerance: Double, useFilteredMeasurement: Boolean = true): Boolean {
-        return (goal - (if (useFilteredMeasurement) lastFilteredMeasurement else lastRawMeasurement)).position <= tolerance;
+        return abs(
+            (goal - (if (useFilteredMeasurement) lastFilteredMeasurement else
+                lastRawMeasurement)).position
+        ) <= tolerance;
     }
 }
 

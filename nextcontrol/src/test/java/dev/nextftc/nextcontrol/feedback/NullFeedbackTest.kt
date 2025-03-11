@@ -26,7 +26,7 @@ class NullFeedbackTest {
     @Test
     fun `calculate returns 0 feedback`() {
         // Arrange
-        val feedback = NullFeedback()
+        val feedback = FeedbackElement { 0.0 }
         val error = KineticState(1.0, 2.0, 3.0)
 
         // Act
@@ -39,7 +39,7 @@ class NullFeedbackTest {
     @Test
     fun `calculate returns 0 feedback even for NaN and infinity input`() {
         // Arrange
-        val feedback = NullFeedforward()
+        val feedback = FeedbackElement { 0.0 }
         val error = KineticState(1.0, Double.POSITIVE_INFINITY, Double.NaN)
 
         // Act

@@ -30,9 +30,9 @@ import dev.nextftc.nextcontrol.KineticState
  * @author BeepBot99
  */
 class FilterElement @JvmOverloads constructor(
-    private val positionFilter: Filter = PassThroughFilter(),
-    private val velocityFilter: Filter = PassThroughFilter(),
-    private val accelerationFilter: Filter = PassThroughFilter()
+    private val positionFilter: Filter = Filter { it },
+    private val velocityFilter: Filter = Filter { it },
+    private val accelerationFilter: Filter = Filter { it }
 ) {
 
     /**

@@ -22,12 +22,12 @@ import org.junit.Assert.*
 
 import org.junit.Test
 
-class PassThroughFilterTest {
+class NullFilterTest {
 
     @Test
     fun `returns value passed in`() {
         // Arrange
-        val filter = PassThroughFilter()
+        val filter = Filter { it }
 
         val input = 10.0
 

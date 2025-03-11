@@ -32,15 +32,15 @@ data class LowPassParameters @JvmOverloads constructor(
  *
  * @param parameters The parameters to use to configure the filter
  */
-class LowPassFilter(val parameters: dev.nextftc.nextcontrol.filters.LowPassParameters) :
-    dev.nextftc.nextcontrol.filters.Filter {
+class LowPassFilter(val parameters: LowPassParameters) :
+    Filter {
 
     /**
      * @param alpha The low pass gain. Must be between 0 and 1.
      * @param startingEstimate The initial estimate. Should be equal to the starting position. Is only read on class initialization.
      */
     constructor(alpha: Double, startingEstimate: Double = 0.0) : this(
-        dev.nextftc.nextcontrol.filters.LowPassParameters(
+        LowPassParameters(
             alpha,
             startingEstimate
         )

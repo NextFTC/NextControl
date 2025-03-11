@@ -28,7 +28,7 @@ import dev.nextftc.nextcontrol.KineticState
  *
  * @author BeepBot99
  */
-interface FeedbackElement {
+fun interface FeedbackElement {
 
     /**
      * Calculates the power to apply to the system.
@@ -37,21 +37,4 @@ interface FeedbackElement {
      * @return The power to apply to the system.
      */
     fun calculate(error: KineticState): Double
-}
-
-/**
- * A [FeedbackElement] that does nothing
- * This can be useful when you want to rely on only feedforward control, with no feedback.
- *
- * @author BeepBot99
- */
-class NullFeedback : FeedbackElement {
-
-    /**
-     * Calculates the power to apply to the system.
-     *
-     * @param error The current error in the system.
-     * @return Zero, as this feedback element does nothing.
-     */
-    override fun calculate(error: KineticState): Double = 0.0
 }

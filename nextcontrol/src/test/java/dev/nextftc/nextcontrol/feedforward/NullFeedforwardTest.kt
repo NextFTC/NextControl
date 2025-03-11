@@ -26,7 +26,7 @@ class NullFeedforwardTest {
     @Test
     fun `calculate returns 0 feedforward`() {
         // Arrange
-        val feedforward = NullFeedforward()
+        val feedforward = FeedforwardElement { 0.0 }
         val reference = KineticState(1.0, 2.0, 3.0)
 
         // Act
@@ -39,7 +39,7 @@ class NullFeedforwardTest {
     @Test
     fun `calculate returns 0 feedforward even for NaN and infinity input`() {
         // Arrange
-        val feedforward = NullFeedforward()
+        val feedforward = FeedforwardElement { 0.0 }
         val reference = KineticState(1.0, Double.POSITIVE_INFINITY, Double.NaN)
 
         // Act

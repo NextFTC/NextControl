@@ -23,7 +23,7 @@ package dev.nextftc.nextcontrol.filters
  *
  * @author BeepBot99
  */
-interface Filter {
+fun interface Filter {
 
     /**
      * Filters the given sensor measurement.
@@ -33,22 +33,4 @@ interface Filter {
      * @return The filtered sensor measurement.
      */
     fun filter(sensorMeasurement: Double): Double
-}
-
-/**
- * A filter that does no filtering and directly returns the sensor measurement.
- * This can be useful when you do not want to filter your sensor measurements.
- *
- * @author BeepBot99
- */
-class PassThroughFilter : Filter {
-
-    /**
-     * Filters the given sensor measurement.
-     *
-     * @param sensorMeasurement The sensor measurement to filter
-     *
-     * @return [sensorMeasurement], as this filter does no filtering.
-     */
-    override fun filter(sensorMeasurement: Double): Double = sensorMeasurement
 }

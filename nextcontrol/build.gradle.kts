@@ -38,7 +38,7 @@ java {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            groupId = "com.rowanmcalpin.nextcontrol"
+            groupId = "dev.nextftc"
             artifactId = "nextcontrol"
             version = libs.versions.nextcontrol.get()
 
@@ -48,12 +48,10 @@ publishing {
         }
     }
 
-    /* TODO: Figure out where to store maven.rowanmcalpin.com locally so I can safely publish to it
     repositories {
         maven {
             name = "publishing"
-            url = uri("")
+            url = uri("../../maven.rowanmcalpin.com")
         }
     }
-     */
 }

@@ -22,7 +22,7 @@ import dev.nextftc.nextcontrol.KineticState
 import kotlin.math.sign
 
 /**
- * Parameters for a [BasicFeedforwardElement]
+ * Parameters for a [BasicFeedforward]
  *
  * @param kV velocity gain, multiplied by the target velocity
  * @param kA acceleration gain, multiplied by the target acceleration
@@ -43,7 +43,7 @@ data class BasicFeedforwardParameters @JvmOverloads constructor(
  *
  * @author rowan-mcalpin
  */
-class BasicFeedforwardElement constructor(val parameters: BasicFeedforwardParameters): FeedforwardElement {
+class BasicFeedforward constructor(val parameters: BasicFeedforwardParameters): FeedforwardElement {
     /**
      * Calculates the feedforward for a given reference
      *

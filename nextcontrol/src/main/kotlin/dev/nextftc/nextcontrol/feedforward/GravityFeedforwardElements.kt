@@ -19,12 +19,11 @@
 package dev.nextftc.nextcontrol.feedforward
 
 import dev.nextftc.nextcontrol.KineticState
-import java.util.function.Supplier
 import kotlin.math.cos
 import kotlin.math.sign
 
 /**
- * Parameters for [ElevatorFeedforwardElement] and [ArmFeedforwardElement]
+ * Parameters for [ElevatorFeedforward] and [ArmFeedforward]
  *
  * @param kV velocity gain, multiplied by the target velocity
  * @param kA acceleration gain, multiplied by the target acceleration
@@ -45,7 +44,7 @@ class GravityFeedforwardParameters @JvmOverloads constructor(
  *
  * @author rowan-mcalpin
  */
-class ElevatorFeedforwardElement(val parameters: GravityFeedforwardParameters): FeedforwardElement {
+class ElevatorFeedforward(val parameters: GravityFeedforwardParameters): FeedforwardElement {
     /**
      * Calculates the feedforward for a given reference
      *
@@ -68,14 +67,14 @@ class ElevatorFeedforwardElement(val parameters: GravityFeedforwardParameters): 
  *
  * @author rowan-mcalpin
  */
-class ArmFeedforwardElement(val parameters: GravityFeedforwardParameters, val positionToAngle: (position: Double) -> Double): FeedforwardElement {
+class ArmFeedforward(val parameters: GravityFeedforwardParameters): FeedforwardElement {
     /**
      * Calculates the feedforward for a given reference
      *
      * @param reference the currently desired [KineticState] for the system
      */
     override fun calculate(reference: KineticState): Double {
-        return parameters.kG * cos(positionToAngle(reference.position)) +
+        return parameters.kG * cos(reference.position) +
                 parameters.kV * reference.velocity +
                 parameters.kA * reference.acceleration +
                 parameters.kS * reference.velocity.sign

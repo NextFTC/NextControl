@@ -38,4 +38,16 @@ data class KineticState @JvmOverloads constructor(
         velocity - other.velocity,
         acceleration - other.acceleration
     )
+
+    operator fun times(scalar: Double): KineticState = KineticState(
+        position * scalar,
+        velocity * scalar,
+        acceleration * scalar
+    )
+
+    operator fun plus(other: KineticState): KineticState = KineticState(
+        position + other.position,
+        velocity + other.velocity,
+        acceleration + other.acceleration
+    )
 }

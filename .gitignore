@@ -4,3 +4,6 @@
 # Ignore Gradle build output directory
 build
 /local.properties
+/.kotlin/sessions/kotlin-compiler-8927256935484652352.salive
+/.idea
+

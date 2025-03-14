@@ -6,7 +6,7 @@ import dev.nextftc.nextcontrol.feedback.PIDCoefficients
 import dev.nextftc.nextcontrol.feedforward.FeedforwardElement
 import dev.nextftc.nextcontrol.filters.FilterElement
 import dev.nextftc.nextcontrol.interpolators.ConstantInterpolator
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 class ControlSystemBuilder {
 

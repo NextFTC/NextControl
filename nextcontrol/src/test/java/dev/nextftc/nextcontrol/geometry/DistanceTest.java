@@ -16,25 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nextftc.nextcontrol.feedback
+package dev.nextftc.nextcontrol.geometry;
 
-import dev.nextftc.nextcontrol.KineticState
+import org.junit.Test;
 
-/**
- * An element of a feedback controller.
- * A feedback controller is a controller that changes its input based on the error in the system, or
- *  the difference between the current state and the desired state (the reference). A feedback
- *  controller attempts to bring the error in the system to zero.
- *
- * @author BeepBot99
- */
-fun interface FeedbackElement {
-
-    /**
-     * Calculates the power to apply to the system.
-     *
-     * @param error The current error in the system.
-     * @return The power to apply to the system.
-     */
-    fun calculate(error: KineticState): Double
+public class DistanceTest {
+    @Test
+    public void testDistance(){
+        Distance d1 = Distances.fromCm(2);
+    }
 }

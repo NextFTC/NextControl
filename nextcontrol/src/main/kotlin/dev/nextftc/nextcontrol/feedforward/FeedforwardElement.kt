@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 /**
  * An element of a feedforward controller.

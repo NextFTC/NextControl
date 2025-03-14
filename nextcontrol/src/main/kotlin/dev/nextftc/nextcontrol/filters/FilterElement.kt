@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.filters
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 /**
  * An element that filters the position, velocity, and acceleration of a [KineticState].

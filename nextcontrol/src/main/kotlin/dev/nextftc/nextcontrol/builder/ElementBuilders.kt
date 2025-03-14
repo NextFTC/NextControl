@@ -7,7 +7,7 @@ import dev.nextftc.nextcontrol.feedback.PIDType
 import dev.nextftc.nextcontrol.filters.ChainedFilter
 import dev.nextftc.nextcontrol.filters.Filter
 import dev.nextftc.nextcontrol.filters.LowPassFilter
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 @DslMarker
 annotation class ControlSystemMarker
@@ -31,7 +31,7 @@ class FeedbackElementBuilder {
 
     fun posPid(coefficients: PIDCoefficients) = apply {
         feedbackElement = PIDElement(
-            PIDType.POSITIONAL,
+            PIDType.POSITION,
             coefficients
         )
     }

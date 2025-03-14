@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.interpolators
 
-import dev.nextftc.nextcontrol.KineticState
+import dev.nextftc.nextcontrol.utils.KineticState
 
 /**
  * An element of a setpoint interpolator.

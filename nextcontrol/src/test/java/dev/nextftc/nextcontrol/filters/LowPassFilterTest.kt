@@ -30,10 +30,10 @@ class LowPassFilterTest {
 
         // Assert
         assertThrows(IllegalArgumentException::class.java) {
-            dev.nextftc.nextcontrol.filters.LowPassFilter(tooHighAlphaParameters)
+            LowPassFilter(tooLowAlpha)
         }
         assertThrows(IllegalArgumentException::class.java) {
-            dev.nextftc.nextcontrol.filters.LowPassFilter(tooLowAlphaParameters)
+            LowPassFilter(tooHighAlpha)
         }
     }
     @Test

@@ -18,10 +18,12 @@
 
 package dev.nextftc.nextcontrol
 
+import dev.nextftc.nextcontrol.builder.ControlSystemBuilder
 import dev.nextftc.nextcontrol.feedback.FeedbackElement
 import dev.nextftc.nextcontrol.feedforward.FeedforwardElement
 import dev.nextftc.nextcontrol.filters.FilterElement
 import dev.nextftc.nextcontrol.interpolators.InterpolatorElement
+import dev.nextftc.nextcontrol.utils.KineticState
 import kotlin.math.abs
 
 /**
@@ -50,7 +52,6 @@ class ControlSystem(
     private val filter: FilterElement,
     private val interpolator: InterpolatorElement,
 ) {
-
     /**
      * The current goal of the system
      */
@@ -106,6 +107,12 @@ class ControlSystem(
             (goal - (if (useFilteredMeasurement) lastFilteredMeasurement else
                 lastRawMeasurement)).position
         ) <= tolerance;
+        }
+
+    companion object {
+        @JvmStatic
+        fun builder() = ControlSystemBuilder()
+
+        operator fun invoke() = builder()
     }
 }
-

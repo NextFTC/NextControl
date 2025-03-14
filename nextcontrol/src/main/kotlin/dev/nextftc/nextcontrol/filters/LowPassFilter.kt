@@ -39,7 +39,7 @@ class LowPassFilter(val parameters: LowPassParameters) :
      * @param alpha The low pass gain. Must be between 0 and 1.
      * @param startingEstimate The initial estimate. Should be equal to the starting position. Is only read on class initialization.
      */
-    constructor(alpha: Double, startingEstimate: Double = 0.0) : this(
+    @JvmOverloads constructor(alpha: Double, startingEstimate: Double = 0.0) : this(
         LowPassParameters(
             alpha,
             startingEstimate

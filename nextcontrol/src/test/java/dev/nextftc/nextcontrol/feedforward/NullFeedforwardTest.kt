@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.KineticState
+import dev.nextftc.nextcontrol.utils.KineticState
 import org.junit.Assert.*
 import org.junit.Test
 

@@ -18,39 +18,30 @@
 
 package dev.nextftc.nextcontrol.interpolators
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
+import dev.nextftc.nextcontrol.filters.LowPassParameters
 
 /**
- * An element of a setpoint interpolator.
- * An interpolator element is given a goal and outputs a reference each loop.
+ * This smoothly interpolates to the goal in order to smooth out setpoint changes
  *
- * @author BeepBot99
+ * @param alpha how much the interpolator relies on the goal
+ *
+ * @author rowan-mcalpin
  */
-interface InterpolatorElement {
+class FirstOrderLagInterpolator(val parameters: LowPassParameters): InterpolatorElement {
+    init {
+        require(parameters.alpha in 0.0..1.0) {
+            "Lag interpolator gain must be between 0 and 1, but was $parameters.alpha"
+        }
+    }
 
-    /**
-     * The goal that the interpolator is trying to reach
-     */
-    var goal: KineticState
+    override var goal: KineticState = KineticState()
 
-    /**
-     * The reference at the current time
-     */
-    val currentReference: KineticState
-}
+    private var lastReference: KineticState = KineticState()
 
-/**
- * An [InterpolatorElement] that doesn't interpolate and always returns the goal.
- *
- * @param goal The initial goal, usually zero.
- *
- * @author BeepBot99
- */
-class ConstantInterpolator(override var goal: KineticState) : InterpolatorElement {
-
-    /**
-     * The reference at the current time, which is always equal to [goal].
-     */
     override val currentReference: KineticState
-        get() = goal
+        get() {
+            lastReference = goal * parameters.alpha + lastReference * (1 - parameters.alpha)
+            return lastReference
+        }
 }

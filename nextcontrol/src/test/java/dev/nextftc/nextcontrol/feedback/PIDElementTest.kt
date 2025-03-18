@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedback
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 import dev.nextftc.nextcontrol.utils.TimeUtil
 import io.mockk.every
 import io.mockk.mockkObject

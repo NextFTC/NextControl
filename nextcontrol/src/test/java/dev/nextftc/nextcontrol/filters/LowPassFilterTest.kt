@@ -1,10 +1,11 @@
 package dev.nextftc.nextcontrol.filters
 
-import kotlin.test.assertEquals
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class LowPassFilterTest {
+
     @Test
     fun `parameters passed in constructor are put in parameters object`() {
         // Arrange
@@ -12,7 +13,7 @@ class LowPassFilterTest {
         val initialEstimate = 10.0
 
         // Act
-        val lowPassFilter = dev.nextftc.nextcontrol.filters.LowPassFilter(alpha, initialEstimate)
+        val lowPassFilter = LowPassFilter(alpha, initialEstimate)
         val parameters = lowPassFilter.parameters
 
         // Assert
@@ -26,22 +27,23 @@ class LowPassFilterTest {
         val tooLowAlpha = -1.0
         val tooHighAlpha = 2.0
 
-        val tooHighAlphaParameters = dev.nextftc.nextcontrol.filters.LowPassParameters(tooHighAlpha)
-        val tooLowAlphaParameters = dev.nextftc.nextcontrol.filters.LowPassParameters(tooLowAlpha)
+        val tooHighAlphaParameters = LowPassParameters(tooHighAlpha)
+        val tooLowAlphaParameters = LowPassParameters(tooLowAlpha)
 
         // Assert
         assertFailsWith<IllegalArgumentException> {
-            LowPassFilter(tooLowAlpha)
+            LowPassFilter(tooLowAlphaParameters)
         }
         assertFailsWith<IllegalArgumentException> {
-            LowPassFilter(tooHighAlpha)
+            LowPassFilter(tooHighAlphaParameters)
         }
     }
+
     @Test
     fun `returns sensor measurement when alpha is 0`() {
         // Arrange
-        val parameters = dev.nextftc.nextcontrol.filters.LowPassParameters(0.0)
-        val lowPassFilter = dev.nextftc.nextcontrol.filters.LowPassFilter(parameters)
+        val parameters = LowPassParameters(0.0)
+        val lowPassFilter = LowPassFilter(parameters)
         val firstSensorMeasurement = 10.0
         val secondSensorMeasurement = 20.0
 
@@ -58,8 +60,8 @@ class LowPassFilterTest {
     fun `returns initial estimate when alpha is 1`() {
         // Arrange
         val initialEstimate = 10.0
-        val parameters = dev.nextftc.nextcontrol.filters.LowPassParameters(1.0, initialEstimate)
-        val lowPassFilter = dev.nextftc.nextcontrol.filters.LowPassFilter(parameters)
+        val parameters = LowPassParameters(1.0, initialEstimate)
+        val lowPassFilter = LowPassFilter(parameters)
 
         val firstSensorMeasurement = 15.0
         val secondSensorMeasurement = 20.0
@@ -76,11 +78,11 @@ class LowPassFilterTest {
     @Test
     fun `default initial estimate is 0`() {
         // Arrange
-        val parameters = dev.nextftc.nextcontrol.filters.LowPassParameters(0.5)
-        val lowPassFilter = dev.nextftc.nextcontrol.filters.LowPassFilter(parameters)
+        val parameters = LowPassParameters(0.5)
+        val lowPassFilter = LowPassFilter(parameters)
 
-        val nonZeroParameters = dev.nextftc.nextcontrol.filters.LowPassParameters(0.5, 10.0)
-        val nonZeroLowPassFilter = dev.nextftc.nextcontrol.filters.LowPassFilter(nonZeroParameters)
+        val nonZeroParameters = LowPassParameters(0.5, 10.0)
+        val nonZeroLowPassFilter = LowPassFilter(nonZeroParameters)
 
         // Assert
         assertEquals(0.0, lowPassFilter.previousEstimate, 0.0)
@@ -90,8 +92,8 @@ class LowPassFilterTest {
     @Test
     fun `estimates remains constant when sensor measurements are the same`() {
         // Arrange
-        val parameters = dev.nextftc.nextcontrol.filters.LowPassParameters(0.5, 15.0)
-        val lowPassFilter = dev.nextftc.nextcontrol.filters.LowPassFilter(parameters)
+        val parameters = LowPassParameters(0.5, 15.0)
+        val lowPassFilter = LowPassFilter(parameters)
         val firstSensorMeasurement = 15.0
         val secondSensorMeasurement = 15.0
         val expectedEstimate = 15.0
@@ -108,7 +110,7 @@ class LowPassFilterTest {
     @Test
     fun `applies low pass filter and smooths input correctly`() {
         // Arrange
-        val lowPassFilter = dev.nextftc.nextcontrol.filters.LowPassFilter(0.5)
+        val lowPassFilter = LowPassFilter(0.5)
         val firstSensorMeasurement = 10.0
         val secondSenorMeasurement = 20.0
         val thirdSensorMeasurement = 25.0
@@ -130,8 +132,8 @@ class LowPassFilterTest {
     @Test
     fun `changing alpha halfway through changes filter behavior`() {
         // Arrange
-        val parameters = dev.nextftc.nextcontrol.filters.LowPassParameters(0.0)
-        val filter = dev.nextftc.nextcontrol.filters.LowPassFilter(parameters)
+        val parameters = LowPassParameters(0.0)
+        val filter = LowPassFilter(parameters)
 
         val firstSensorMeasurement = 10.0
         val expectedFirstEstimate = 10.0

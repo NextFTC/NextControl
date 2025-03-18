@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 import kotlin.math.sign
 
 /**
@@ -44,7 +44,7 @@ data class BasicFeedforwardParameters @JvmOverloads constructor(
  *
  * @author rowan-mcalpin
  */
-class BasicFeedforward constructor(val parameters: BasicFeedforwardParameters) :
+class BasicFeedforward(val parameters: BasicFeedforwardParameters) :
     FeedforwardElement {
 
     @JvmOverloads

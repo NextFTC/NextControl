@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.interpolators
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

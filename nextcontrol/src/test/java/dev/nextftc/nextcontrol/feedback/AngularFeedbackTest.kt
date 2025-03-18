@@ -1,6 +1,6 @@
 package dev.nextftc.nextcontrol.feedback
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.interpolators
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 data class FirstOrderEMAParameters @JvmOverloads constructor(
     @JvmField var alpha: Double,

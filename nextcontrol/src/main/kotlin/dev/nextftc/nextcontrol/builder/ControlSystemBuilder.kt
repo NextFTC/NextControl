@@ -10,7 +10,7 @@ import dev.nextftc.nextcontrol.interpolators.ConstantInterpolator
 import dev.nextftc.nextcontrol.interpolators.FirstOrderEMAInterpolator
 import dev.nextftc.nextcontrol.interpolators.FirstOrderEMAParameters
 import dev.nextftc.nextcontrol.interpolators.InterpolatorElement
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 class ControlSystemBuilder {
 

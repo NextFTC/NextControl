@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 import kotlin.math.cos
 import kotlin.math.sign
 
@@ -63,7 +63,6 @@ class ElevatorFeedforward(val parameters: GravityFeedforwardParameters) : Feedfo
  * Arm feedforward with velocity, acceleration, static, and gravity to model a vertical elevator
  *
  * @param parameters the [GravityFeedforwardParameters] for the feedforward gains
- * @param positionToAngle function to convert a position into an angle in radians
  *
  * @author rowan-mcalpin
  */

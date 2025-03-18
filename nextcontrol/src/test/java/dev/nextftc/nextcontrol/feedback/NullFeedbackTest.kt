@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedback
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 import kotlin.test.assertEquals
 import kotlin.test.Test
 

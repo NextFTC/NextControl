@@ -3,8 +3,8 @@ package dev.nextftc.nextcontrol.filters
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.Test
 
 class ChainedFilterTest {
@@ -33,7 +33,7 @@ class ChainedFilterTest {
     @Test
     fun `throws exception when no filters are given`() {
         // Assert
-        assertThrows(IllegalArgumentException::class.java) {
+        assertFailsWith<IllegalArgumentException> {
             ChainedFilter()
         }
     }

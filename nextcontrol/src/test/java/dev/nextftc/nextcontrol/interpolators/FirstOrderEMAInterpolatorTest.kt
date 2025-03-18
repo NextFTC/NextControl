@@ -18,17 +18,17 @@
 
 package dev.nextftc.nextcontrol.interpolators
 
-import dev.nextftc.nextcontrol.KineticState
-import dev.nextftc.nextcontrol.filters.LowPassParameters
-import junit.framework.TestCase.assertEquals
-import org.junit.Test
+import dev.nextftc.nextcontrol.utils.KineticState
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class FirstOrderLagInterpolatorTest {
+class FirstOrderEMAInterpolatorTest {
+
     @Test
     fun `smoothly interpolates from zero to five`() {
         // Arrange
-        val parameters = LowPassParameters(0.5)
-        val interpolator = FirstOrderLagInterpolator(parameters)
+        val parameters = FirstOrderEMAParameters(0.5)
+        val interpolator = FirstOrderEMAInterpolator(parameters)
         interpolator.goal = KineticState(5.0)
 
         // Calculate
@@ -49,8 +49,8 @@ class FirstOrderLagInterpolatorTest {
     @Test
     fun `smoothly interpolates back to zero`() {
         // Arrange
-        val parameters = LowPassParameters(0.5)
-        val interpolator = FirstOrderLagInterpolator(parameters)
+        val parameters = FirstOrderEMAParameters(0.5)
+        val interpolator = FirstOrderEMAInterpolator(parameters)
         interpolator.goal = KineticState(5.0)
 
         // Calculate
@@ -69,7 +69,7 @@ class FirstOrderLagInterpolatorTest {
         val c5 = interpolator.currentReference.position
 
         assertEquals(2.421875, c1, 0.0)
-        assertEquals( 1.2109375, c2, 0.0)
+        assertEquals(1.2109375, c2, 0.0)
         assertEquals(0.60546875, c3, 0.0)
         assertEquals(0.302734375, c4, 0.0)
         assertEquals(0.1513671875, c5, 0.0)

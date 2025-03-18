@@ -18,11 +18,12 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.KineticState
-import org.junit.Assert.*
-import org.junit.Test
+import dev.nextftc.nextcontrol.utils.KineticState
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class NullFeedforwardTest {
+
     @Test
     fun `calculate returns 0 feedforward`() {
         // Arrange
@@ -40,7 +41,9 @@ class NullFeedforwardTest {
     fun `calculate returns 0 feedforward even for NaN and infinity input`() {
         // Arrange
         val feedforward = FeedforwardElement { 0.0 }
-        val reference = KineticState(1.0, Double.POSITIVE_INFINITY, Double.NaN)
+        val reference = KineticState(
+            Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NaN
+        )
 
         // Act
         val actual = feedforward.calculate(reference)

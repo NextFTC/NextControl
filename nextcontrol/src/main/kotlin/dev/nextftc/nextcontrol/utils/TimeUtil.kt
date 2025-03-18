@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.nextftc.nextcontrol
+package dev.nextftc.nextcontrol.utils
 
 object TimeUtil {
     fun nanoTime(): Long = System.nanoTime()

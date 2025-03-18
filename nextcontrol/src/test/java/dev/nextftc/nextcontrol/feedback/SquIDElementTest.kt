@@ -18,13 +18,13 @@
 
 package dev.nextftc.nextcontrol.feedback
 
-import dev.nextftc.nextcontrol.KineticState
-import dev.nextftc.nextcontrol.TimeUtil
+import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.utils.TimeUtil
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import org.junit.Assert
+import kotlin.test.assertEquals
 import kotlin.math.sqrt
 import kotlin.test.Test
 
@@ -43,7 +43,7 @@ class SquIDElementTest {
         val actual = squidElement.coefficients
 
         // Assert
-        Assert.assertEquals(expected, actual)
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -60,8 +60,8 @@ class SquIDElementTest {
         val velocityActual = velocitySquID.calculate(input)
 
         // Assert
-        Assert.assertEquals(expected, positionActual, 0.0)
-        Assert.assertEquals(expected, velocityActual, 0.0)
+        assertEquals(expected, positionActual, 0.0)
+        assertEquals(expected, velocityActual, 0.0)
     }
 
     @Test
@@ -80,10 +80,10 @@ class SquIDElementTest {
         val secondVelocityActual = velocitySquID.calculate(input)
 
         // Assert
-        Assert.assertEquals(expected, firstPositionActual, 0.0)
-        Assert.assertEquals(expected, secondPositionActual, 0.0)
-        Assert.assertEquals(expected, firstVelocityActual, 0.0)
-        Assert.assertEquals(expected, secondVelocityActual, 0.0)
+        assertEquals(expected, firstPositionActual, 0.0)
+        assertEquals(expected, secondPositionActual, 0.0)
+        assertEquals(expected, firstVelocityActual, 0.0)
+        assertEquals(expected, secondVelocityActual, 0.0)
     }
 
     @Test
@@ -101,8 +101,8 @@ class SquIDElementTest {
         val velocityActual = velocitySquID.calculate(velocityInput)
 
         // Assert
-        Assert.assertEquals(expected, positionActual, 0.0)
-        Assert.assertEquals(expected, velocityActual, 0.0)
+        assertEquals(expected, positionActual, 0.0)
+        assertEquals(expected, velocityActual, 0.0)
     }
 
     @Test
@@ -140,8 +140,8 @@ class SquIDElementTest {
         val velocityActual = velocitySquID.calculate(KineticState(5.0, thirdError, 25.0))
 
         // Assert
-        Assert.assertEquals(expected, positionActual, 0.0)
-        Assert.assertEquals(expected, velocityActual, 0.0)
+        assertEquals(expected, positionActual, 0.0)
+        assertEquals(expected, velocityActual, 0.0)
         verify(exactly = 6) { TimeUtil.nanoTime() }
 
         unmockkAll()
@@ -163,8 +163,8 @@ class SquIDElementTest {
         val velocityActual = velocitySquID.calculate(velocitySquIDError)
 
         // Assert
-        Assert.assertEquals(expected, positionActual, 0.0)
-        Assert.assertEquals(expected, velocityActual, 0.0)
+        assertEquals(expected, positionActual, 0.0)
+        assertEquals(expected, velocityActual, 0.0)
     }
 
     @Test
@@ -201,8 +201,8 @@ class SquIDElementTest {
             velocitySquID.calculate(KineticState(25.0, secondError, derivativeError))
 
         // Assert
-        Assert.assertEquals(expected, positionActual, 0.0)
-        Assert.assertEquals(expected, velocityActual, 0.0)
+        assertEquals(expected, positionActual, 0.0)
+        assertEquals(expected, velocityActual, 0.0)
         verify(exactly = 4) { TimeUtil.nanoTime() }
 
         unmockkAll()
@@ -224,7 +224,7 @@ class SquIDElementTest {
         val secondActual = secondController.calculate(secondError)
 
         // Assert
-        Assert.assertEquals(firstActual, secondActual, 0.0)
+        assertEquals(firstActual, secondActual, 0.0)
 
         unmockkAll()
     }
@@ -245,7 +245,7 @@ class SquIDElementTest {
         val secondActual = secondController.calculate(secondError)
 
         // Assert
-        Assert.assertEquals(firstActual, secondActual, 0.0)
+        assertEquals(firstActual, secondActual, 0.0)
 
         unmockkAll()
     }

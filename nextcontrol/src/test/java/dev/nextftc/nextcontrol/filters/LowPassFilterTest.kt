@@ -1,7 +1,8 @@
 package dev.nextftc.nextcontrol.filters
 
-import org.junit.Assert.*
-import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
 
 class LowPassFilterTest {
     @Test
@@ -29,10 +30,10 @@ class LowPassFilterTest {
         val tooLowAlphaParameters = dev.nextftc.nextcontrol.filters.LowPassParameters(tooLowAlpha)
 
         // Assert
-        assertThrows(IllegalArgumentException::class.java) {
+        assertFailsWith<IllegalArgumentException> {
             LowPassFilter(tooLowAlpha)
         }
-        assertThrows(IllegalArgumentException::class.java) {
+        assertFailsWith<IllegalArgumentException> {
             LowPassFilter(tooHighAlpha)
         }
     }

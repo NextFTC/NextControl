@@ -18,9 +18,9 @@
 
 package dev.nextftc.nextcontrol.feedback
 
-import dev.nextftc.nextcontrol.KineticState
-import org.junit.Assert.*
-import org.junit.Test
+import dev.nextftc.nextcontrol.utils.KineticState
+import kotlin.test.assertEquals
+import kotlin.test.Test
 
 class NullFeedbackTest {
     @Test

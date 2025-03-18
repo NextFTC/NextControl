@@ -18,9 +18,9 @@
 
 package dev.nextftc.nextcontrol.filters
 
-import org.junit.Assert.*
+import kotlin.test.assertEquals
 
-import org.junit.Test
+import kotlin.test.Test
 
 class NullFilterTest {
 

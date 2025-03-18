@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.KineticState
+import dev.nextftc.nextcontrol.utils.KineticState
 import kotlin.math.cos
 import kotlin.math.sign
 
@@ -44,7 +44,8 @@ data class GravityFeedforwardParameters @JvmOverloads constructor(
  *
  * @author rowan-mcalpin
  */
-class ElevatorFeedforward(val parameters: GravityFeedforwardParameters): FeedforwardElement {
+class ElevatorFeedforward(val parameters: GravityFeedforwardParameters) : FeedforwardElement {
+
     /**
      * Calculates the feedforward for a given reference
      *
@@ -58,7 +59,6 @@ class ElevatorFeedforward(val parameters: GravityFeedforwardParameters): Feedfor
     }
 }
 
-
 /**
  * Arm feedforward with velocity, acceleration, static, and gravity to model a vertical elevator
  *
@@ -67,7 +67,8 @@ class ElevatorFeedforward(val parameters: GravityFeedforwardParameters): Feedfor
  *
  * @author rowan-mcalpin
  */
-class ArmFeedforward(val parameters: GravityFeedforwardParameters): FeedforwardElement {
+class ArmFeedforward(val parameters: GravityFeedforwardParameters) : FeedforwardElement {
+
     /**
      * Calculates the feedforward for a given reference
      *

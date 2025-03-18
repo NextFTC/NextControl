@@ -18,13 +18,13 @@
 
 package dev.nextftc.nextcontrol.feedback
 
-import dev.nextftc.nextcontrol.KineticState
-import dev.nextftc.nextcontrol.TimeUtil
+import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.utils.TimeUtil
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
-import org.junit.Assert.assertEquals
+import kotlin.test.assertEquals
 import kotlin.test.Test
 
 class PIDElementTest {

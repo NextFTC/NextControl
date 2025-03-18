@@ -1,27 +1,13 @@
 package dev.nextftc.nextcontrol.builder
 
-import dev.nextftc.nextcontrol.KineticState
-import dev.nextftc.nextcontrol.feedback.FeedbackElement
-import dev.nextftc.nextcontrol.feedback.PIDCoefficients
-import dev.nextftc.nextcontrol.feedback.PIDElement
-import dev.nextftc.nextcontrol.feedback.PIDType
+import dev.nextftc.nextcontrol.feedback.*
 import dev.nextftc.nextcontrol.filters.ChainedFilter
 import dev.nextftc.nextcontrol.filters.Filter
 import dev.nextftc.nextcontrol.filters.LowPassFilter
+import dev.nextftc.nextcontrol.filters.LowPassParameters
 
 @DslMarker
 annotation class ControlSystemMarker
-
-enum class AngleType {
-    RADIANS,
-    DEGREES
-}
-
-class AngularFeedback(private val type: AngleType, private val feedbackElement: FeedbackElement) :
-    FeedbackElement {
-
-    override fun calculate(error: KineticState): Double = feedbackElement.calculate(error) * 2
-}
 
 @ControlSystemMarker
 class FeedbackElementBuilder {
@@ -29,23 +15,37 @@ class FeedbackElementBuilder {
     var feedbackElement: FeedbackElement =
         FeedbackElement { 0.0 }
 
-    fun posPid(coefficients: PIDCoefficients) = apply {
-        feedbackElement = PIDElement(
-            PIDType.POSITION,
-            coefficients
-        )
-    }
+    fun custom(feedback: FeedbackElement) =
+        apply { feedbackElement = feedback }
 
-    fun velPid(coefficients: PIDCoefficients) = apply {
-        feedbackElement = PIDElement(
-            PIDType.VELOCITY,
-            coefficients
-        )
-    }
+    fun posPid(coefficients: PIDCoefficients) =
+        custom(PIDElement(PIDType.POSITION, coefficients))
 
-    fun custom(feedback: FeedbackElement) = apply {
-        feedbackElement = feedback
-    }
+    @JvmOverloads
+    fun posPid(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =
+        posPid(PIDCoefficients(kP, kI, kD))
+
+    fun velPid(coefficients: PIDCoefficients) =
+        custom(PIDElement(PIDType.VELOCITY, coefficients))
+
+    @JvmOverloads
+    fun velPid(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =
+        velPid(PIDCoefficients(kP, kI, kD))
+
+    fun posSquID(coefficients: PIDCoefficients) =
+        custom(SquIDElement(PIDType.POSITION, coefficients))
+
+    @JvmOverloads
+    fun posSquID(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =
+        posSquID(PIDCoefficients(kP, kI, kD))
+
+    fun velSquID(coefficients: PIDCoefficients) =
+        custom(SquIDElement(PIDType.VELOCITY, coefficients))
+
+    @JvmOverloads
+    fun velSquID(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =
+        velSquID(PIDCoefficients(kP, kI, kD))
+
 
     fun angular(type: AngleType, factory: FeedbackElementBuilder.() -> Any) = apply {
         val builder = FeedbackElementBuilder()
@@ -57,16 +57,21 @@ class FeedbackElementBuilder {
 @ControlSystemMarker
 class FilterBuilder {
 
-    private val filters: MutableList<Filter> = mutableListOf()
-
-    @JvmOverloads
-    fun lowPass(alpha: Double, startingEstimate: Double = 0.0) = apply {
-        filters.add(LowPassFilter(alpha, startingEstimate))
-    }
-
     fun custom(customFilter: Filter) = apply {
         filters.add(customFilter)
     }
+
+    private val filters: MutableList<Filter> = mutableListOf()
+
+    fun lowPass(parameters: LowPassParameters) = custom(LowPassFilter(parameters))
+
+    @JvmOverloads
+    fun lowPass(alpha: Double, startingEstimate: Double = 0.0) = lowPass(
+        LowPassParameters(
+            alpha,
+            startingEstimate
+        )
+    )
 
     fun build(): Filter {
         return when (filters.size) {

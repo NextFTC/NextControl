@@ -25,9 +25,8 @@ import dev.nextftc.nextcontrol.interpolators.InterpolatorElement
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.*
-
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ControlSystemTest {
 
@@ -46,7 +45,7 @@ class ControlSystemTest {
 
         // Assert
         assertEquals(expected, actual)
-        verify (exactly = 1) { interpolator.goal }
+        verify(exactly = 1) { interpolator.goal }
     }
 
     @Test
@@ -61,7 +60,7 @@ class ControlSystemTest {
         controlSystem.goal = input
 
         // Assert
-        verify (exactly = 1) { interpolator.goal = input }
+        verify(exactly = 1) { interpolator.goal = input }
     }
 
     @Test
@@ -69,7 +68,12 @@ class ControlSystemTest {
         // Arrange
         val filter = mockk<FilterElement>(relaxed = true)
 
-        val controlSystem = ControlSystem(mockk(relaxed = true), mockk(relaxed = true), filter, mockk(relaxed = true))
+        val controlSystem = ControlSystem(
+            mockk(relaxed = true),
+            mockk(relaxed = true),
+            filter,
+            mockk(relaxed = true)
+        )
 
         val defaultMeasurement = KineticState()
 
@@ -77,7 +81,7 @@ class ControlSystemTest {
         controlSystem.calculate()
 
         // Assert
-        verify (exactly = 1) { filter.filter(defaultMeasurement) }
+        verify(exactly = 1) { filter.filter(defaultMeasurement) }
     }
 
     @Test
@@ -94,12 +98,12 @@ class ControlSystemTest {
         controlSystem.calculate()
 
         // Assert
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             feedback.calculate(any())
             feedforward.calculate(any())
             filter.filter(any())
         }
-        verify (exactly = 2) {
+        verify(exactly = 2) {
             interpolator.currentReference
         }
     }
@@ -137,7 +141,8 @@ class ControlSystemTest {
         every { feedback.calculate(any()) } returns 2.0
         every { feedforward.calculate(any()) } returns 3.0
 
-        val controlSystem = ControlSystem(feedback, feedforward, mockk(relaxed = true), mockk(relaxed = true))
+        val controlSystem =
+            ControlSystem(feedback, feedforward, mockk(relaxed = true), mockk(relaxed = true))
 
         // Act
         val result = controlSystem.calculate()
@@ -152,7 +157,12 @@ class ControlSystemTest {
         val filter = mockk<FilterElement>(relaxed = true)
         val measurement = KineticState(1.0, 2.0, 3.0)
 
-        val controlSystem = ControlSystem(mockk(relaxed = true), mockk(relaxed = true), filter, mockk(relaxed = true))
+        val controlSystem = ControlSystem(
+            mockk(relaxed = true),
+            mockk(relaxed = true),
+            filter,
+            mockk(relaxed = true)
+        )
 
         // Act
         controlSystem.calculate(measurement)

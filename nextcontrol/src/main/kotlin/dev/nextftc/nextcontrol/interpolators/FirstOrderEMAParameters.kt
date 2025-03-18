@@ -18,26 +18,34 @@
 
 package dev.nextftc.nextcontrol.interpolators
 
-import dev.nextftc.nextcontrol.KineticState
-import dev.nextftc.nextcontrol.filters.LowPassParameters
+import dev.nextftc.nextcontrol.utils.KineticState
+
+data class FirstOrderEMAParameters @JvmOverloads constructor(
+    @JvmField var alpha: Double,
+    @JvmField var startingReference: KineticState = KineticState()
+)
 
 /**
- * This smoothly interpolates to the goal in order to smooth out setpoint changes
+ * An [InterpolatorElement] that smoothly interpolates to the goal in order to smooth out setpoint
+ * changes
  *
- * @param alpha how much the interpolator relies on the goal
+ * Uses a first-order EMA (exponential moving average) setpoint filter
+ *
+ * @param parameters the parameters to use
  *
  * @author rowan-mcalpin
  */
-class FirstOrderLagInterpolator(val parameters: LowPassParameters): InterpolatorElement {
+class FirstOrderEMAInterpolator(val parameters: FirstOrderEMAParameters) : InterpolatorElement {
+
     init {
         require(parameters.alpha in 0.0..1.0) {
-            "Lag interpolator gain must be between 0 and 1, but was $parameters.alpha"
+            "Alpha must be between 0 and 1, but was $parameters.alpha"
         }
     }
 
-    override var goal: KineticState = KineticState()
+    override var goal: KineticState = parameters.startingReference
 
-    private var lastReference: KineticState = KineticState()
+    private var lastReference: KineticState = parameters.startingReference
 
     override val currentReference: KineticState
         get() {

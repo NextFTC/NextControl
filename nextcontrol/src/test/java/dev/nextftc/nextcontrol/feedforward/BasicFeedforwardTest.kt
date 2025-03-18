@@ -18,37 +18,25 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.KineticState
-import org.junit.Assert.*
-import org.junit.Test
+import dev.nextftc.nextcontrol.utils.KineticState
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BasicFeedforwardTest {
+
     @Test
-    fun `calculate returns 0 feedforward when parameters are 0`() {
+    fun `returns zero when all parameters are zero`() {
         // Arrange
-        val parameters = BasicFeedforwardParameters() // Default to 0
+        val parameters = BasicFeedforwardParameters(0.0, 0.0, 0.0)
         val feedforward = BasicFeedforward(parameters)
         val reference = KineticState(1.0, 2.0, 3.0)
+        val expected = 0.0
 
         // Act
         val actual = feedforward.calculate(reference)
 
         // Assert
-        assertEquals(0.0, actual, 0.0)
-    }
-
-    @Test
-    fun `calculate returns correct feedforward`() {
-        // Arrange
-        val parameters = BasicFeedforwardParameters(1.0, 1.0, 1.0)
-        val feedforward = BasicFeedforward(parameters)
-        val reference = KineticState(1.0, 2.0, 3.0)
-
-        // Act
-        val actual = feedforward.calculate(reference)
-
-        // Assert
-        assertEquals(6.0, actual, 0.0)
+        assertEquals(expected, actual, 0.0)
     }
 
     @Test
@@ -71,16 +59,35 @@ class BasicFeedforwardTest {
     }
 
     @Test
-    fun `kS works correctly`() {
+    fun `when other gains are zero output is kS times sign of velocity`() {
         // Arrange
-        val parameters = BasicFeedforwardParameters(kS = 1.0)
+        val parameters = BasicFeedforwardParameters(kS = 5.0)
         val feedforward = BasicFeedforward(parameters)
-        val reference = KineticState(0.0, -1.0, 0.0)
+        val reference1 = KineticState(6.0, -2.0, 7.0)
+        val reference2 = KineticState(-10.0, 3.0, 12.0)
+        val expected1 = 5.0 * -1
+        val expected2 = 5.0 * 1
+
+        // Act
+        val actual1 = feedforward.calculate(reference1)
+        val actual2 = feedforward.calculate(reference2)
+
+        // Assert
+        assertEquals(expected1, actual1, 0.0)
+        assertEquals(expected2, actual2, 0.0)
+    }
+
+    @Test
+    fun `properly applies feedforward`() {
+        // Arrange
+        val parameters = BasicFeedforwardParameters(1.0, 1.0, 1.0)
+        val feedforward = BasicFeedforward(parameters)
+        val reference = KineticState(1.0, 2.0, 3.0)
 
         // Act
         val actual = feedforward.calculate(reference)
 
         // Assert
-        assertEquals(-1.0, actual, 0.0)
+        assertEquals(6.0, actual, 0.0)
     }
 }

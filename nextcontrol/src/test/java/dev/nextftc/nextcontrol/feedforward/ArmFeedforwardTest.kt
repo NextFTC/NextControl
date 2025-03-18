@@ -18,47 +18,39 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.KineticState
-import org.junit.Assert.*
-import org.junit.Test
+import dev.nextftc.nextcontrol.utils.KineticState
 import kotlin.math.PI
-import kotlin.math.sqrt
+import kotlin.math.cos
+import kotlin.math.sign
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ArmFeedforwardTest {
+
     @Test
-    fun `calculate returns 0 feedforward when parameters are 0 and angle is vertical`() {
+    fun `returns zero when all parameters are zero`() {
         // Arrange
-        val parameters = GravityFeedforwardParameters() // Default to 0
+        val parameters = GravityFeedforwardParameters(0.0, 0.0, 0.0, 0.0)
         val feedforward = ArmFeedforward(parameters)
-        val reference = KineticState(PI/2, 2.0, 3.0)
+        val reference = KineticState(1.0, 2.0, 3.0)
+        val expected = 0.0
 
         // Act
         val actual = feedforward.calculate(reference)
 
         // Assert
-        assertEquals(0.0, actual, 0.0)
+        assertEquals(expected, actual, 0.0)
     }
 
     @Test
-    fun `calculate returns correct feedforward`() {
+    fun `changing parameters class affects feedforward output`() {
         // Arrange
         val parameters = GravityFeedforwardParameters(1.0, 1.0, 1.0, 1.0)
         val feedforward = ArmFeedforward(parameters)
-        val reference = KineticState(0.0, 2.0, 3.0)
-
-        // Act
-        val actual = feedforward.calculate(reference)
-
-        // Assert
-        assertEquals(7.0, actual, 0.0)
-    }
-
-    @Test
-    fun `calculate returns correct feedforward after constants change`() {
-        // Arrange
-        val parameters = GravityFeedforwardParameters(1.0, 1.0, 1.0, 1.0)
-        val feedforward = ArmFeedforward(parameters)
-        val reference = KineticState(0.0, 1.0, 1.0)
+        val reference = KineticState(3.0, 5.0, 7.0)
+        val expected1 = parameters.kG * cos(3.0) + parameters.kV * 5.0 + parameters.kA * 7.0 +
+                parameters.kS * 5.0.sign
+        val expected2 = 2.0 * cos(3.0) + 2.0 * 5.0 + 2.0 * 7.0 + 2.0 * 5.0.sign
 
         // Act
         val actual1 = feedforward.calculate(reference)
@@ -69,35 +61,61 @@ class ArmFeedforwardTest {
         val actual2 = feedforward.calculate(reference)
 
         // Assert
-        assertEquals(4.0, actual1, 0.0)
-        assertEquals(8.0, actual2, 0.0)
+        assertEquals(expected1, actual1, 1e-6)
+        assertEquals(expected2, actual2, 1e-6)
     }
 
     @Test
-    fun `kS works correctly`() {
+    fun `when other gains are zero output is kS times sign of velocity`() {
         // Arrange
-        val parameters = GravityFeedforwardParameters(kS = 1.0)
+        val parameters = GravityFeedforwardParameters(kS = 5.0)
         val feedforward = ArmFeedforward(parameters)
-        val reference = KineticState(0.0, -1.0, 0.0)
+        val reference1 = KineticState(6.0, -2.0, 7.0)
+        val reference2 = KineticState(-10.0, 3.0, 12.0)
+        val expected1 = 5.0 * -1
+        val expected2 = 5.0 * 1
 
         // Act
-        val actual = feedforward.calculate(reference)
+        val actual1 = feedforward.calculate(reference1)
+        val actual2 = feedforward.calculate(reference2)
 
         // Assert
-        assertEquals(-1.0, actual, 0.0)
+        assertEquals(expected1, actual1, 0.0)
+        assertEquals(expected2, actual2, 0.0)
     }
 
     @Test
-    fun `kG works correctly`() {
+    fun `when other gains are zero output is kG times cosine of position`() {
         // Arrange
-        val parameters = GravityFeedforwardParameters(kG = 1.0)
+        val parameters = GravityFeedforwardParameters(kG = 2.5)
         val feedforward = ArmFeedforward(parameters)
-        val reference = KineticState(PI/4, 1.0, 0.0)
+        val reference1 = KineticState(PI / 4, 7.0, 8.0)
+        val reference2 = KineticState(5.0, -6.5, 2.6)
+        val expected1 = parameters.kG * cos(PI / 4)
+        val expected2 = parameters.kG * cos(5.0)
 
         // Act
-        val actual = feedforward.calculate(reference)
+        val actual1 = feedforward.calculate(reference1)
+        val actual2 = feedforward.calculate(reference2)
 
         // Assert
-        assertEquals(sqrt(2.0)/2.0, actual, 0.0)
+        assertEquals(expected1, actual1, 1e-6)
+        assertEquals(expected2, actual2, 1e-6)
+    }
+
+    @Test
+    fun `properly applies feedforward`() {
+        // Arrange
+        val parameters = GravityFeedforwardParameters(1.0, 2.0, 3.0, 4.0)
+        val feedforwardElement = ArmFeedforward(parameters)
+        val reference = KineticState(1.0, 2.0, 3.0)
+        val expected = parameters.kG * cos(1.0) + parameters.kV * 2.0 + parameters.kA * 3.0 +
+                parameters.kS * 2.0.sign
+
+        // Act
+        val actual = feedforwardElement.calculate(reference)
+
+        // Assert
+        assertEquals(expected, actual, 1e-6)
     }
 }

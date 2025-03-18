@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedback
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 /**
  * An element of a feedback controller.
@@ -26,7 +26,7 @@ import dev.nextftc.nextcontrol.utils.KineticState
  *  the difference between the current state and the desired state (the reference). A feedback
  *  controller attempts to bring the error in the system to zero.
  *
- * @author BeepBot99
+ * @author BeepBot99, rowan-mcalpin
  */
 fun interface FeedbackElement {
 
@@ -37,4 +37,9 @@ fun interface FeedbackElement {
      * @return The power to apply to the system.
      */
     fun calculate(error: KineticState): Double
+
+    /**
+     * Resets this element
+     */
+    fun reset() { }
 }

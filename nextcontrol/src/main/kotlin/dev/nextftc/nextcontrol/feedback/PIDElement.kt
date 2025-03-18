@@ -21,6 +21,7 @@ package dev.nextftc.nextcontrol.feedback
 import dev.nextftc.nextcontrol.ControlSystem
 import dev.nextftc.nextcontrol.KineticState
 import dev.nextftc.nextcontrol.TimeUtil
+import kotlin.math.sign
 
 /**
  * Coefficients for a [PIDElement].
@@ -44,9 +45,9 @@ enum class PIDType {
  *
  * @param coefficients the [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle
+ * @author Zach.Waffle, rowan-mcalpin
  */
-internal class PIDController(val coefficients: PIDCoefficients) {
+internal class PIDController @JvmOverloads constructor(val coefficients: PIDCoefficients, val resetIntegralOnZeroCrossover: Boolean = true) {
 
     private var lastError: Double = 0.0
     private var errorSum = 0.0
@@ -74,6 +75,10 @@ internal class PIDController(val coefficients: PIDCoefficients) {
             lastTimestamp = timestamp
         }
 
+        if (resetIntegralOnZeroCrossover && lastError.sign != positionError.sign) {
+            errorSum = 0.0
+        }
+
         val deltaT = (timestamp - lastTimestamp).toDouble()
         errorSum += positionError * deltaT
 
@@ -99,18 +104,19 @@ internal class PIDController(val coefficients: PIDCoefficients) {
  *
  * @param coefficients The [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle
+ * @author Zach.Waffle, rowan-mcalpin
  */
-class PIDElement(
+class PIDElement @JvmOverloads constructor(
     private val pidType: PIDType,
-    coefficients: PIDCoefficients
+    coefficients: PIDCoefficients,
+    resetIntegralOnZeroCrossover: Boolean = true
 ) : FeedbackElement {
 
     @JvmOverloads
     constructor(pidType: PIDType, kP: Double, kI: Double = 0.0, kD: Double = 0.0) :
             this(pidType, PIDCoefficients(kP, kI, kD))
 
-    private val controller = PIDController(coefficients)
+    private val controller = PIDController(coefficients, resetIntegralOnZeroCrossover)
 
     val coefficients by controller::coefficients
 
@@ -120,4 +126,8 @@ class PIDElement(
     }
 
     override fun calculate(error: KineticState) = calculate(TimeUtil.nanoTime(), error)
+
+    override fun reset() {
+        controller.reset()
+    }
 }

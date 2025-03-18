@@ -21,6 +21,8 @@ package dev.nextftc.nextcontrol.feedback
 import dev.nextftc.nextcontrol.ControlSystem
 import dev.nextftc.nextcontrol.KineticState
 import dev.nextftc.nextcontrol.TimeUtil
+import kotlin.math.abs
+import kotlin.math.sign
 import kotlin.math.sqrt
 
 /**
@@ -28,7 +30,7 @@ import kotlin.math.sqrt
  *
  * @param coefficients the [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle
+ * @author Zach.Waffle, rowan-mcalpin
  */
 internal class SquIDController(val coefficients: PIDCoefficients) {
 
@@ -63,7 +65,7 @@ internal class SquIDController(val coefficients: PIDCoefficients) {
         lastError = positionError
         lastTimestamp = timestamp
 
-        return sqrt(coefficients.kP * positionError) + coefficients.kI * errorSum +
+        return sqrt(abs(coefficients.kP * positionError)) * positionError.sign + coefficients.kI * errorSum +
                 coefficients.kD * velocityError
     }
 
@@ -82,7 +84,7 @@ internal class SquIDController(val coefficients: PIDCoefficients) {
  *
  * @param coefficients The [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle
+ * @author Zach.Waffle, rowan-mcalpin
  */
 class SquIDElement(
     private val pidType: PIDType,
@@ -103,4 +105,8 @@ class SquIDElement(
     }
 
     override fun calculate(error: KineticState) = this.calculate(TimeUtil.nanoTime(), error)
+
+    override fun reset() {
+        controller.reset()
+    }
 }

@@ -18,13 +18,13 @@
 
 package dev.nextftc.nextcontrol.interpolators
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 /**
  * An element of a setpoint interpolator.
  * An interpolator element is given a goal and outputs a reference each loop.
  *
- * @author BeepBot99
+ * @author BeepBot99, rowan-mcalpin
  */
 interface InterpolatorElement {
 
@@ -37,6 +37,11 @@ interface InterpolatorElement {
      * The reference at the current time
      */
     val currentReference: KineticState
+
+    /**
+     * Resets this element
+     */
+    fun reset() { }
 }
 
 /**

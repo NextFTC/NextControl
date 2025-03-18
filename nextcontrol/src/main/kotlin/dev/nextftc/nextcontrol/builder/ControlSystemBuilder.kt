@@ -1,12 +1,12 @@
 package dev.nextftc.nextcontrol.builder
 
 import dev.nextftc.nextcontrol.ControlSystem
+import dev.nextftc.nextcontrol.KineticState
 import dev.nextftc.nextcontrol.feedback.FeedbackElement
 import dev.nextftc.nextcontrol.feedback.PIDCoefficients
 import dev.nextftc.nextcontrol.feedforward.FeedforwardElement
 import dev.nextftc.nextcontrol.filters.FilterElement
 import dev.nextftc.nextcontrol.interpolators.ConstantInterpolator
-import dev.nextftc.nextcontrol.utils.KineticState
 
 class ControlSystemBuilder {
 

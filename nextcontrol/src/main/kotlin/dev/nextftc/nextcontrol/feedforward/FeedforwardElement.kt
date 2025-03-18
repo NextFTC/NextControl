@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.feedforward
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 /**
  * An element of a feedforward controller.
@@ -26,7 +26,7 @@ import dev.nextftc.nextcontrol.utils.KineticState
  *  already known about the system. A feedforward controller uses a *model* of the system to
  *  "predict" the proper input to obtain a desired output.
  *
- * @author BeepBot99
+ * @author BeepBot99, rowan-mcalpin
  */
 fun interface FeedforwardElement {
 
@@ -37,4 +37,9 @@ fun interface FeedforwardElement {
      * @return The power to apply to the system.
      */
     fun calculate(reference: KineticState): Double
+
+    /**
+     * Resets this element
+     */
+    fun reset() { }
 }

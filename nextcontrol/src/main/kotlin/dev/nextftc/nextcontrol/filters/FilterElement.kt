@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.filters
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 
 /**
  * An element that filters the position, velocity, and acceleration of a [KineticState].
@@ -27,7 +27,7 @@ import dev.nextftc.nextcontrol.utils.KineticState
  * @param velocityFilter the [Filter] to apply to the velocity
  * @param accelerationFilter the [Filter] to apply to the acceleration
  *
- * @author BeepBot99
+ * @author BeepBot99, rowan-mcalpin
  */
 class FilterElement @JvmOverloads constructor(
     private val positionFilter: Filter = Filter { it },
@@ -48,5 +48,11 @@ class FilterElement @JvmOverloads constructor(
             velocityFilter.filter(sensorMeasurement.velocity),
             accelerationFilter.filter(sensorMeasurement.acceleration)
         )
+    }
+
+    fun reset() {
+        positionFilter.reset()
+        velocityFilter.reset()
+        accelerationFilter.reset()
     }
 }

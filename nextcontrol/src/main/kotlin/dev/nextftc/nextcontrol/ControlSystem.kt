@@ -23,7 +23,6 @@ import dev.nextftc.nextcontrol.feedback.FeedbackElement
 import dev.nextftc.nextcontrol.feedforward.FeedforwardElement
 import dev.nextftc.nextcontrol.filters.FilterElement
 import dev.nextftc.nextcontrol.interpolators.InterpolatorElement
-import dev.nextftc.nextcontrol.utils.KineticState
 import kotlin.math.abs
 
 /**
@@ -56,6 +55,11 @@ class ControlSystem(
      * The current goal of the system
      */
     var goal: KineticState by interpolator::goal
+
+    /**
+     * The current reference of the system
+     */
+    val reference: KineticState by interpolator::currentReference
 
     /**
      * The last raw (unfiltered) measurement
@@ -98,8 +102,6 @@ class ControlSystem(
      * @param useFilteredMeasurement whether to use a filtered or raw measurement
      *
      * @return whether the system is within tolerance of the goal
-     *
-     * @author rowan-mcalpin
      */
     @JvmOverloads
     fun isWithinTolerance(tolerance: Double, useFilteredMeasurement: Boolean = true): Boolean {
@@ -107,7 +109,17 @@ class ControlSystem(
             (goal - (if (useFilteredMeasurement) lastFilteredMeasurement else
                 lastRawMeasurement)).position
         ) <= tolerance;
-        }
+    }
+
+    /**
+     * Resets all Elements of the ControlSystem
+     */
+    fun reset() {
+        feedback.reset()
+        feedforward.reset()
+        filter.reset()
+        interpolator.reset()
+    }
 
     companion object {
         @JvmStatic

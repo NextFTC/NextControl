@@ -18,7 +18,7 @@
 
 package dev.nextftc.nextcontrol.filters
 
-import dev.nextftc.nextcontrol.utils.KineticState
+import dev.nextftc.nextcontrol.KineticState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

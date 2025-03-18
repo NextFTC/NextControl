@@ -21,7 +21,7 @@ package dev.nextftc.nextcontrol.filters
 /**
  * A filter that can be applied to a sensor measurement.
  *
- * @author BeepBot99
+ * @author BeepBot99, rowan-mcalpin
  */
 fun interface Filter {
 
@@ -33,4 +33,9 @@ fun interface Filter {
      * @return The filtered sensor measurement.
      */
     fun filter(sensorMeasurement: Double): Double
+
+    /**
+     * Resets this filter
+     */
+    fun reset() { }
 }

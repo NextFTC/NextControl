@@ -13,7 +13,6 @@ public class JavaControlSystemBuilderExample {
                 .posFilter(filter -> {
                     filter.lowPass(0.5);
                     filter.custom(ticks -> (ticks / 400));
-                    return filter;
                 })
                 .angular(
                         AngleType.RADIANS,

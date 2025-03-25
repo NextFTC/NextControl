@@ -37,7 +37,7 @@ data class BangBangParameters @JvmOverloads constructor(
  *  -1, when error is 0, output 0.
  *
  * @param feedbackType The type of component this controller operates on
- * @param gain the constant that the output is multiplied by
+ * @param parameters the [BangBangParameters] for this element
  *
  * @author rowan-mcalpin
  */

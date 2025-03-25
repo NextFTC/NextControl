@@ -62,14 +62,9 @@ class ControlSystem(
     val reference: KineticState by interpolator::currentReference
 
     /**
-     * The last raw (unfiltered) measurement
-     */
-    var lastRawMeasurement: KineticState = KineticState();
-
-    /**
      * The last filtered measurement
      */
-    var lastFilteredMeasurement: KineticState = KineticState();
+    var lastMeasurement: KineticState = KineticState();
 
     /**
      * Calculates the output power given the current state of the system. In the case that your
@@ -84,8 +79,7 @@ class ControlSystem(
     fun calculate(sensorMeasurement: KineticState = KineticState()): Double {
         val filteredMeasurement = filter.filter(sensorMeasurement)
 
-        lastRawMeasurement = sensorMeasurement;
-        lastFilteredMeasurement = filteredMeasurement;
+        lastMeasurement = filteredMeasurement;
 
         val error = interpolator.currentReference - filteredMeasurement
 
@@ -99,16 +93,16 @@ class ControlSystem(
      * Whether the system is within a specified tolerance of the goal
      *
      * @param tolerance how close to the goal is considered within tolerance
-     * @param useFilteredMeasurement whether to use a filtered or raw measurement
      *
      * @return whether the system is within tolerance of the goal
+     *
+     * @author rowan-mcalpin
      */
-    @JvmOverloads
-    fun isWithinTolerance(tolerance: Double, useFilteredMeasurement: Boolean = true): Boolean {
-        return abs(
-            (goal - (if (useFilteredMeasurement) lastFilteredMeasurement else
-                lastRawMeasurement)).position
-        ) <= tolerance;
+    fun isWithinTolerance(tolerance: KineticState): Boolean {
+        return(
+            abs((goal - lastMeasurement).position) <= tolerance.position &&
+            abs((goal - lastMeasurement).velocity) <= tolerance.velocity &&
+            abs((goal - lastMeasurement).acceleration) <= tolerance.acceleration)
     }
 
     /**

@@ -19,28 +19,28 @@ class FeedbackElementBuilder {
         apply { feedbackElement = feedback }
 
     fun posPid(coefficients: PIDCoefficients) =
-        custom(PIDElement(PIDType.POSITION, coefficients))
+        custom(PIDElement(FeedbackType.POSITION, coefficients))
 
     @JvmOverloads
     fun posPid(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =
         posPid(PIDCoefficients(kP, kI, kD))
 
     fun velPid(coefficients: PIDCoefficients) =
-        custom(PIDElement(PIDType.VELOCITY, coefficients))
+        custom(PIDElement(FeedbackType.VELOCITY, coefficients))
 
     @JvmOverloads
     fun velPid(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =
         velPid(PIDCoefficients(kP, kI, kD))
 
     fun posSquID(coefficients: PIDCoefficients) =
-        custom(SquIDElement(PIDType.POSITION, coefficients))
+        custom(SquIDElement(FeedbackType.POSITION, coefficients))
 
     @JvmOverloads
     fun posSquID(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =
         posSquID(PIDCoefficients(kP, kI, kD))
 
     fun velSquID(coefficients: PIDCoefficients) =
-        custom(SquIDElement(PIDType.VELOCITY, coefficients))
+        custom(SquIDElement(FeedbackType.VELOCITY, coefficients))
 
     @JvmOverloads
     fun velSquID(kP: Double, kI: Double = 0.0, kD: Double = 0.0) =

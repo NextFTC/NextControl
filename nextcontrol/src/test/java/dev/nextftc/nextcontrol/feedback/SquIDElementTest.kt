@@ -39,7 +39,7 @@ class SquIDElementTest {
         val expected = PIDCoefficients(kP, kI, kD)
 
         // Act
-        val squidElement = SquIDElement(PIDType.POSITION, kP, kI, kD)
+        val squidElement = SquIDElement(FeedbackType.POSITION, kP, kI, kD)
         val actual = squidElement.coefficients
 
         // Assert
@@ -50,8 +50,8 @@ class SquIDElementTest {
     fun `returns zero when all gains are zero`() {
         // Arrange
         val coefficients = PIDCoefficients(0.0, 0.0, 0.0)
-        val positionSquID = SquIDElement(PIDType.POSITION, coefficients)
-        val velocitySquID = SquIDElement(PIDType.VELOCITY, coefficients)
+        val positionSquID = SquIDElement(FeedbackType.POSITION, coefficients)
+        val velocitySquID = SquIDElement(FeedbackType.VELOCITY, coefficients)
         val input = KineticState(10.0, 20.0, 30.0)
         val expected = 0.0
 
@@ -68,8 +68,8 @@ class SquIDElementTest {
     fun `returns zero when error has always been zero`() {
         // Arrange
         val coefficients = PIDCoefficients(1.0, 2.0, 3.0)
-        val positionSquID = SquIDElement(PIDType.POSITION, coefficients)
-        val velocitySquID = SquIDElement(PIDType.VELOCITY, coefficients)
+        val positionSquID = SquIDElement(FeedbackType.POSITION, coefficients)
+        val velocitySquID = SquIDElement(FeedbackType.VELOCITY, coefficients)
         val input = KineticState(0.0, 0.0, 0.0)
         val expected = 0.0
 
@@ -89,8 +89,8 @@ class SquIDElementTest {
     @Test
     fun `returns square root of error when kP is one and kI and kD are zero`() {
         // Arrange
-        val positionSquID = SquIDElement(PIDType.POSITION, 1.0, 0.0, 0.0)
-        val velocitySquID = SquIDElement(PIDType.VELOCITY, 1.0, 0.0, 0.0)
+        val positionSquID = SquIDElement(FeedbackType.POSITION, 1.0, 0.0, 0.0)
+        val velocitySquID = SquIDElement(FeedbackType.VELOCITY, 1.0, 0.0, 0.0)
         val error = 10.0
         val positionInput = KineticState(error, 20.0, 30.0)
         val velocityInput = KineticState(20.0, error, 30.0)
@@ -109,8 +109,8 @@ class SquIDElementTest {
     fun `returns sum of all past errors times deltaT when kI is one and kP and kD are zero`() {
         // Arrange
         val coefficients = PIDCoefficients(0.0, 1.0, 0.0)
-        val positionSquID = SquIDElement(PIDType.POSITION, coefficients)
-        val velocitySquID = SquIDElement(PIDType.VELOCITY, coefficients)
+        val positionSquID = SquIDElement(FeedbackType.POSITION, coefficients)
+        val velocitySquID = SquIDElement(FeedbackType.VELOCITY, coefficients)
 
         mockkObject(TimeUtil)
 
@@ -151,8 +151,8 @@ class SquIDElementTest {
     fun `returns error of derivative when kD is one and kP and kI are zero`() {
         // Arrange
         val coefficients = PIDCoefficients(0.0, 0.0, 1.0)
-        val positionSquID = SquIDElement(PIDType.POSITION, coefficients)
-        val velocitySquID = SquIDElement(PIDType.VELOCITY, coefficients)
+        val positionSquID = SquIDElement(FeedbackType.POSITION, coefficients)
+        val velocitySquID = SquIDElement(FeedbackType.VELOCITY, coefficients)
         val derivativeError = 20.0
         val positionSquIDError = KineticState(10.0, derivativeError, 30.0)
         val velocitySquIDError = KineticState(10.0, 30.0, derivativeError)
@@ -174,8 +174,8 @@ class SquIDElementTest {
         val kI = 6.0
         val kD = 7.0
         val coefficients = PIDCoefficients(kP, kI, kD)
-        val positionSquID = SquIDElement(PIDType.POSITION, coefficients)
-        val velocitySquID = SquIDElement(PIDType.VELOCITY, coefficients)
+        val positionSquID = SquIDElement(FeedbackType.POSITION, coefficients)
+        val velocitySquID = SquIDElement(FeedbackType.VELOCITY, coefficients)
 
         mockkObject(TimeUtil)
 
@@ -212,8 +212,8 @@ class SquIDElementTest {
     fun `acceleration error does not affect position squid`() {
         // Arrange
         val coefficients = PIDCoefficients(1.0, 2.0, 3.0)
-        val firstController = SquIDElement(PIDType.POSITION, coefficients)
-        val secondController = SquIDElement(PIDType.POSITION, coefficients)
+        val firstController = SquIDElement(FeedbackType.POSITION, coefficients)
+        val secondController = SquIDElement(FeedbackType.POSITION, coefficients)
         val firstError = KineticState(10.0, 20.0, 30.0)
         val secondError = KineticState(10.0, 20.0, 40.0)
         mockkObject(TimeUtil)
@@ -233,8 +233,8 @@ class SquIDElementTest {
     fun `position error does not affect velocity squid`() {
         // Arrange
         val coefficients = PIDCoefficients(1.0, 2.0, 3.0)
-        val firstController = SquIDElement(PIDType.VELOCITY, coefficients)
-        val secondController = SquIDElement(PIDType.VELOCITY, coefficients)
+        val firstController = SquIDElement(FeedbackType.VELOCITY, coefficients)
+        val secondController = SquIDElement(FeedbackType.VELOCITY, coefficients)
         val firstError = KineticState(10.0, 20.0, 30.0)
         val secondError = KineticState(15.0, 20.0, 30.0)
         mockkObject(TimeUtil)

@@ -20,7 +20,7 @@ package dev.nextftc.nextcontrol.feedback
 
 import dev.nextftc.nextcontrol.ControlSystem
 import dev.nextftc.nextcontrol.KineticState
-import dev.nextftc.nextcontrol.TimeUtil
+import dev.nextftc.nextcontrol.utils.TimeUtil
 import kotlin.math.sign
 
 /**
@@ -35,10 +35,6 @@ data class PIDCoefficients @JvmOverloads constructor(
     @JvmField var kI: Double = 0.0,
     @JvmField var kD: Double = 0.0
 )
-
-enum class PIDType {
-    POSITION, VELOCITY
-}
 
 /**
  * Traditional proportional-integral-derivative controller.
@@ -107,13 +103,13 @@ internal class PIDController @JvmOverloads constructor(val coefficients: PIDCoef
  * @author Zach.Waffle, rowan-mcalpin
  */
 class PIDElement @JvmOverloads constructor(
-    private val pidType: PIDType,
+    private val pidType: FeedbackType,
     coefficients: PIDCoefficients,
     resetIntegralOnZeroCrossover: Boolean = true
 ) : FeedbackElement {
 
     @JvmOverloads
-    constructor(pidType: PIDType, kP: Double, kI: Double = 0.0, kD: Double = 0.0) :
+    constructor(pidType: FeedbackType, kP: Double, kI: Double = 0.0, kD: Double = 0.0) :
             this(pidType, PIDCoefficients(kP, kI, kD))
 
     private val controller = PIDController(coefficients, resetIntegralOnZeroCrossover)
@@ -121,8 +117,8 @@ class PIDElement @JvmOverloads constructor(
     val coefficients by controller::coefficients
 
     fun calculate(timestamp: Long, error: KineticState) = when (pidType) {
-        PIDType.POSITION -> controller.calculate(timestamp, error.position, error.velocity)
-        PIDType.VELOCITY -> controller.calculate(timestamp, error.velocity, error.acceleration)
+        FeedbackType.POSITION -> controller.calculate(timestamp, error.position, error.velocity)
+        FeedbackType.VELOCITY -> controller.calculate(timestamp, error.velocity, error.acceleration)
     }
 
     override fun calculate(error: KineticState) = calculate(TimeUtil.nanoTime(), error)

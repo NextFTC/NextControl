@@ -20,7 +20,7 @@ package dev.nextftc.nextcontrol.feedback
 
 import dev.nextftc.nextcontrol.ControlSystem
 import dev.nextftc.nextcontrol.KineticState
-import dev.nextftc.nextcontrol.TimeUtil
+import dev.nextftc.nextcontrol.utils.TimeUtil
 import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.math.sqrt
@@ -87,12 +87,12 @@ internal class SquIDController(val coefficients: PIDCoefficients) {
  * @author Zach.Waffle, rowan-mcalpin
  */
 class SquIDElement(
-    private val pidType: PIDType,
+    private val pidType: FeedbackType,
     coefficients: PIDCoefficients
 ) : FeedbackElement {
 
     @JvmOverloads
-    constructor(pidType: PIDType, kP: Double, kI: Double = 0.0, kD: Double = 0.0) :
+    constructor(pidType: FeedbackType, kP: Double, kI: Double = 0.0, kD: Double = 0.0) :
             this(pidType, PIDCoefficients(kP, kI, kD))
 
     private val controller = SquIDController(coefficients)
@@ -100,8 +100,8 @@ class SquIDElement(
     val coefficients by controller::coefficients
 
     fun calculate(timestamp: Long, error: KineticState) = when (pidType) {
-        PIDType.POSITION -> controller.calculate(timestamp, error.position, error.velocity)
-        PIDType.VELOCITY -> controller.calculate(timestamp, error.velocity, error.acceleration)
+        FeedbackType.POSITION -> controller.calculate(timestamp, error.position, error.velocity)
+        FeedbackType.VELOCITY -> controller.calculate(timestamp, error.velocity, error.acceleration)
     }
 
     override fun calculate(error: KineticState) = this.calculate(TimeUtil.nanoTime(), error)

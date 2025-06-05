@@ -20,15 +20,23 @@ package dev.nextftc.nextcontrol.feedback
 
 import dev.nextftc.nextcontrol.KineticState
 import kotlin.math.PI
+import org.apache.commons.math3.util.MathUtils.normalizeAngle
 
-enum class AngleType(val halfRevolution: Double) {
-    RADIANS(PI),
-    DEGREES(180.0),
-    REVOLUTIONS(0.5)
+enum class AngleType(val halfRevolution: Double, val toRadians: Double) {
+    RADIANS(PI, 1.0),
+    DEGREES(180.0, PI / 180.0),
+    REVOLUTIONS(0.5, 2 * PI);
+
+    /**
+     * Normalizes [angle] to the range [[halfRevolution], [halfRevolution]].
+     *
+     */
+    fun normalize(angle: Double) =
+        normalizeAngle(angle * toRadians, 0.0) / toRadians
 }
 
 /**
- * A [FeedbackElement] that wraps another [FeedbackElement]
+ * A [FeedbackElement] that wraps another [FeedbackElement] for angular positions.
  */
 class AngularFeedback(private val type: AngleType, private val feedbackElement: FeedbackElement) :
     FeedbackElement {
@@ -41,12 +49,7 @@ class AngularFeedback(private val type: AngleType, private val feedbackElement: 
      */
     override fun calculate(error: KineticState): Double {
         return feedbackElement.calculate(
-            error.copy(
-                position = ((error.position + type.halfRevolution) % (2 * type.halfRevolution) + 2 *
-                        type.halfRevolution) % (2 *
-                        type.halfRevolution) -
-                        type.halfRevolution
-            )
+            error.copy(position = type.normalize(error.position))
         )
     }
 }

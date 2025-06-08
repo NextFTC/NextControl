@@ -31,6 +31,9 @@ plugins {
     `java-library`
 
     `maven-publish`
+
+    //allows for a test fixture source set (which is published to maven) that is accessible from the test source set
+    `java-test-fixtures`
 }
 
 repositories {
@@ -47,6 +50,9 @@ dependencies {
     testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.assertions)
     testImplementation(libs.kotest.property)
+    testFixturesImplementation(libs.kotest.runner)
+    testFixturesImplementation(libs.kotest.assertions)
+    testFixturesImplementation(libs.kotest.property)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

@@ -1,0 +1,28 @@
+name: Deploy Release
+
+on:
+  release:
+    types: [released, prereleased]
+
+jobs:
+  deploy-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Grant execute permission
+        run: chmod +x gradlew
+      - name: Deploy to Maven Central
+        run: ./gradlew deployCentralPortal -Pversion=$VERSION
+        env:
+          MVN_GPG_KEY: ${{ secrets.MVN_GPG_KEY }}
+          MVN_GPG_PASSWORD: ${{ secrets.MVN_GPG_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          VERSION: ${{ github.event.release.tag_name }}

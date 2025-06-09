@@ -79,7 +79,7 @@ class ControlSystem(
     fun calculate(sensorMeasurement: KineticState = KineticState()): Double {
         val filteredMeasurement = filter.filter(sensorMeasurement)
 
-        lastMeasurement = filteredMeasurement;
+        lastMeasurement = filteredMeasurement
 
         val error = interpolator.currentReference - filteredMeasurement
 

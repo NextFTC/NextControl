@@ -19,7 +19,6 @@
 package dev.nextftc.control.feedback
 
 import dev.nextftc.control.KineticState
-import kotlin.math.sign
 
 /**
  * Parameters for a [BangBangElement]

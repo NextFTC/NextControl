@@ -24,10 +24,6 @@ import dev.nextftc.control.feedback.PIDCoefficients
 import dev.nextftc.control.feedback.SquIDElement
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.every
-import io.mockk.mockkObject
-import io.mockk.unmockkAll
-import io.mockk.verify
 import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TestTimeSource

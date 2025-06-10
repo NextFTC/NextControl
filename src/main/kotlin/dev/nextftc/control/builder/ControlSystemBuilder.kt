@@ -11,6 +11,8 @@ import dev.nextftc.control.interpolators.FirstOrderEMAInterpolator
 import dev.nextftc.control.interpolators.FirstOrderEMAParameters
 import dev.nextftc.control.interpolators.InterpolatorElement
 import dev.nextftc.control.KineticState
+import dev.nextftc.control.interpolators.TrapezoidInterpolator
+import dev.nextftc.control.interpolators.TrapezoidProfileParameters
 import dev.nextftc.functionalInterfaces.Configurator
 
 class ControlSystemBuilder {
@@ -94,6 +96,13 @@ class ControlSystemBuilder {
 
     fun emaInterpolator(parameters: FirstOrderEMAParameters) =
         interpolator(FirstOrderEMAInterpolator(parameters))
+
+    fun trapezoidInterpolator(parameters: TrapezoidProfileParameters) =
+        interpolator(TrapezoidInterpolator(parameters))
+
+    @JvmOverloads
+    fun trapezoidInterpolator(maxVel: Double, accel: Double, decel: Double = accel) =
+        interpolator(TrapezoidInterpolator(maxVel, accel, decel))
 
     fun build() = ControlSystem(
         feedbackBuilder.feedbackElement, feedforward, FilterElement(

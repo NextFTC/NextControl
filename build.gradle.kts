@@ -23,7 +23,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(8)
 }
 
 val dokkaJar = tasks.register<Jar>("dokkaJar") {

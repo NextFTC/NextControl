@@ -18,6 +18,8 @@ jobs:
           distribution: 'temurin'
       - name: Grant execute permission
         run: chmod +x gradlew
+      - name: Extract version (strip leading v)
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
       - name: Deploy to Maven Central
         run: ./gradlew deployCentralPortal -Pversion=$VERSION
         env:
@@ -25,4 +27,4 @@ jobs:
           MVN_GPG_PASSWORD: ${{ secrets.MVN_GPG_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          VERSION: ${{ github.event.release.tag_name }}
+          VERSION: ${{ env.VERSION }}

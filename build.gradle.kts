@@ -58,12 +58,9 @@ deployer {
         }
     }
 
-    localSpec {
-        release.version = "$version-LOCAL"
-    }
+    localSpec()
 
     nexusSpec("snapshot") {
-        release.version = "$version-SNAPSHOT"
         repositoryUrl = "https://central.sonatype.com/repository/maven-snapshots/"
         auth {
             user = secret("SONATYPE_USERNAME")

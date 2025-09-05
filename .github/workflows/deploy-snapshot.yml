@@ -19,7 +19,7 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
       - name: Deploy Snapshot
-        run: ./gradlew deployNexusSnapshot
+        run: ./gradlew deployNexusSnapshot -Pversion=$VERSION-SNAPSHOT
         env:
           MVN_GPG_KEY: ${{ secrets.MVN_GPG_KEY }}
           MVN_GPG_PASSWORD: ${{ secrets.MVN_GPG_PASSWORD }}

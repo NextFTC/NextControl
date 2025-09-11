@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.0.0"
+kotlin = "2.2.20"
 kotest = "5.9.1"
 
 [libraries]
@@ -16,3 +16,4 @@ kotest = ["kotest-runner", "kotest-assertations", "kotest-property", "kotest-dat
 [plugins]
 deployer = { id = "io.deepmedia.tools.deployer", version = "0.18.0" }
 dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

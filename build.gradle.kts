@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version libs.versions.kotlin.get()
+    alias(libs.plugins.kotlin.jvm)
     `java-library`
     alias(libs.plugins.deployer)
     alias(libs.plugins.dokka)

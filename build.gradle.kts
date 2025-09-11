@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     `java-library`
@@ -24,6 +26,9 @@ tasks.test {
 
 kotlin {
     jvmToolchain(8)
+    compilerOptions {
+        jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
+    }
 }
 
 val dokkaJar = tasks.register<Jar>("dokkaJar") {

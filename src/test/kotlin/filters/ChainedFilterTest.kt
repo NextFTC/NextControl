@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025. The NextFTC Team and other contributors.
+ *
+ * See the LICENSE in the root of this project for more information.
+ */
+
 package dev.nextftc.nextcontrol.filters
 
 import dev.nextftc.control.filters.ChainedFilter

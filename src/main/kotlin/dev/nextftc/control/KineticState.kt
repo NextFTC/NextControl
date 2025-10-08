@@ -25,7 +25,7 @@ package dev.nextftc.control
  * @param velocity the state's velocity
  * @param acceleration the state's acceleration
  *
- * @author BeepBot99, zachwaffle4
+ * @author BeepBot99, Zach Harel
  */
 data class KineticState @JvmOverloads constructor(
     val position: Double = 0.0,

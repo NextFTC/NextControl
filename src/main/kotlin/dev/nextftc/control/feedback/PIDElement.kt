@@ -43,7 +43,7 @@ data class PIDCoefficients @JvmOverloads constructor(
  *
  * @param coefficients the [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle, rowan-mcalpin
+ * @author Zach Harel, rowan-mcalpin
  */
 internal class PIDController @JvmOverloads constructor(
     val coefficients: PIDCoefficients,
@@ -105,7 +105,7 @@ internal class PIDController @JvmOverloads constructor(
  *
  * @param coefficients The [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle, rowan-mcalpin
+ * @author Zach Harel, rowan-mcalpin
  */
 class PIDElement @JvmOverloads constructor(
     private val pidType: FeedbackType,

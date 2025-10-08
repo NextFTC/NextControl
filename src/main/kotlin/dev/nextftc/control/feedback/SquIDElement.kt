@@ -32,7 +32,7 @@ import kotlin.time.TimeSource
  *
  * @param coefficients the [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle, rowan-mcalpin
+ * @author Zach Harel, rowan-mcalpin
  */
 internal class SquIDController(val coefficients: PIDCoefficients) {
 
@@ -86,7 +86,7 @@ internal class SquIDController(val coefficients: PIDCoefficients) {
  *
  * @param coefficients The [PIDCoefficients] that contains the PID gains
  *
- * @author Zach.Waffle, rowan-mcalpin
+ * @author Zach Harel, rowan-mcalpin
  */
 class SquIDElement @JvmOverloads constructor(
     private val pidType: FeedbackType,

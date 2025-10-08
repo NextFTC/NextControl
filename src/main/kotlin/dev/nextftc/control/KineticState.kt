@@ -25,13 +25,18 @@ package dev.nextftc.control
  * @param velocity the state's velocity
  * @param acceleration the state's acceleration
  *
- * @author BeepBot99
+ * @author BeepBot99, zachwaffle4
  */
 data class KineticState @JvmOverloads constructor(
     val position: Double = 0.0,
     val velocity: Double = 0.0,
     val acceleration: Double = 0.0
 ) {
+    operator fun plus(other: KineticState): KineticState = KineticState(
+        position + other.position,
+        velocity + other.velocity,
+        acceleration + other.acceleration
+    )
 
     operator fun minus(other: KineticState): KineticState = KineticState(
         position - other.position,
@@ -45,9 +50,15 @@ data class KineticState @JvmOverloads constructor(
         acceleration * scalar
     )
 
-    operator fun plus(other: KineticState): KineticState = KineticState(
-        position + other.position,
-        velocity + other.velocity,
-        acceleration + other.acceleration
+    operator fun div(scalar: Double): KineticState = KineticState(
+        position / scalar,
+        velocity / scalar,
+        acceleration / scalar
     )
+
+    operator fun unaryMinus(): KineticState = KineticState(-position, -velocity, -acceleration)
+
+    companion object {
+        @JvmField val ZERO = KineticState()
+    }
 }

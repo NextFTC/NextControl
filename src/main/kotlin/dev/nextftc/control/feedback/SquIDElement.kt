@@ -34,7 +34,7 @@ import kotlin.time.TimeSource
  *
  * @author Zach Harel, rowan-mcalpin
  */
-internal class SquIDController(val coefficients: PIDCoefficients) {
+class SquIDController(val coefficients: PIDCoefficients) {
 
     private var lastError: Double = 0.0
     private var errorSum = 0.0

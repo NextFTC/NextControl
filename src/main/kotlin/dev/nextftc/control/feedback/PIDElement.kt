@@ -45,7 +45,7 @@ data class PIDCoefficients @JvmOverloads constructor(
  *
  * @author Zach Harel, rowan-mcalpin
  */
-internal class PIDController @JvmOverloads constructor(
+class PIDController @JvmOverloads constructor(
     val coefficients: PIDCoefficients,
     val resetIntegralOnZeroCrossover: Boolean = true
 ) {

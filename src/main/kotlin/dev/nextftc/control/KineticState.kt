@@ -21,9 +21,9 @@ package dev.nextftc.control
 /**
  * Holds a state of a kinetic system.
  *
- * @param position the state's position
- * @param velocity the state's velocity
- * @param acceleration the state's acceleration
+ * @property position the state's position
+ * @property velocity the state's velocity
+ * @property acceleration the state's acceleration
  *
  * @author BeepBot99, Zach Harel
  */
@@ -59,6 +59,24 @@ data class KineticState @JvmOverloads constructor(
     operator fun unaryMinus(): KineticState = KineticState(-position, -velocity, -acceleration)
 
     companion object {
+        /**
+         * A kinetic state with all components set to zero.
+         */
         @JvmField val ZERO = KineticState()
+
+        /**
+         * Creates a kinetic state with the given position and zero velocity and acceleration.
+         */
+        @JvmStatic fun pos(position: Double) = KineticState(position=position)
+
+        /**
+         * Creates a kinetic state with the given velocity and zero position and acceleration.
+         */
+        @JvmStatic fun vel(velocity: Double) = KineticState(velocity=velocity)
+
+        /**
+         * Creates a kinetic state with the given acceleration and zero position and velocity.
+         */
+        @JvmStatic fun accel(acceleration: Double) = KineticState(acceleration=acceleration)
     }
 }

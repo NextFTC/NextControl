@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     `java-library`
@@ -13,6 +15,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.ojalgo)
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.mockk)
     api(libs.functional.interfaces)

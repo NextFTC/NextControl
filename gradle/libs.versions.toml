@@ -1,8 +1,10 @@
 [versions]
 kotlin = "2.0.0"
 kotest = "5.9.1"
+ojalgo = "56.1.1"
 
 [libraries]
+ojalgo = { module = "org.ojalgo:ojalgo", version.ref = "ojalgo" }
 kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertations = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
